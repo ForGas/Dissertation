@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Dissertation.Persistence;
+#nullable disable
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -49,3 +50,4 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         base.OnModelCreating(builder);
     }
 }
+#nullable enable

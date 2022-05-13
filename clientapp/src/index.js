@@ -6,22 +6,24 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
-const rootElement = document.getElementById('root');
+//const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+//const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
-
-ReactDOM.render(
+root.render(
   <React.StrictMode>
-    <BrowserRouter basename={baseUrl}>
+    <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
-  rootElement);
+  </React.StrictMode>
+);
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//       <App />
+//     </BrowserRouter>
+//   </React.StrictMode>,
+//   rootElement);
 
 reportWebVitals();

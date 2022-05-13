@@ -20,7 +20,7 @@ export class Home extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : App.renderTest(this.state.test);
+            : Home.renderTest(this.state.test);
 
         return (
             <div>
@@ -36,7 +36,7 @@ export class Home extends Component {
             .then((response) => response.text())
             .then((data) => {
                 console.log(data);
-                this.setState({ forecasts: data, loading: false });
+                this.setState({ test: data, loading: false });
             });
     }
 }
