@@ -16,7 +16,6 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Dissertation.Infrastructure.Common;
 using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 
@@ -98,11 +97,6 @@ public class Startup
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dissertation", Version = "v1" });
         });
-
-        services.AddSpaStaticFiles(configuration =>
-        {
-            configuration.RootPath = @"../clientapp/build";
-        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -125,7 +119,6 @@ public class Startup
             .AllowAnyHeader());
 
         app.UseStaticFiles();
-        app.UseSpaStaticFiles();
 
         app.UseAuthorization();
 
@@ -138,17 +131,6 @@ public class Startup
                 pattern: "{controller}/{action=Index}/{id?}");
 
             endpoints.MapHangfireDashboard();
-        });
-
-        app.UseSpa(spa =>
-        {
-            spa.Options.SourcePath = @"../clientapp";
-
-            if (env.IsDevelopment())
-            {
-                //spa.UseReactDevelopmentServer(npmScript: "start");
-                spa.UseProxyToSpaDevelopmentServer("https://localhost:3000");
-            }
         });
     }
 }
