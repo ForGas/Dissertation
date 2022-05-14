@@ -38,7 +38,7 @@ public interface IRespondentAutomationLogic : IBaseDecisionTreeLogic
 // TODO : доделать ограничение через Repository
 public abstract class BaseDecisionTreeLogic<T>
     : IBaseDecisionTreeLogic, IDisposable
-    where T : BaseModel
+    where T : BaseIdentity
 {
     private int _predictedValue;
     private double _errorValue;

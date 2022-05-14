@@ -6,10 +6,15 @@ namespace Dissertation.Common.Services;
 public interface IApplicationDbContext
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+    #region Respondent
     DbSet<Analyst> Analysts { get; set; }
     DbSet<CyberSecuritySpecialist> CyberSecuritySpecialists { get; set; }
-    DbSet<FileIncident> Executors { get; set; }
-    //DbSet<PatternePlan> PatternePlans { get; set; }
-    //DbSet<Plan> Plans { get; set; }
-    //DbSet<ResponseToolInfo> ResponseToolInfo { get; set; }
+    #endregion
+
+    #region File
+    DbSet<FileIncident> FileIncidents { get; set; }
+    DbSet<FileDetails> FileDetails { get; set; }
+    DbSet<VirusTotalReportDetails> VirusTotalReportDetails { get; set; }
+    #endregion
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using System.Reflection;
 
+#nullable disable
 namespace Dissertation.Infrastructure.Mappings;
-
 public class MappingProfile : Profile
 {
     public MappingProfile()

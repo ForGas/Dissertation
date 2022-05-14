@@ -1,28 +1,30 @@
 ﻿using MediatR;
+using AutoMapper;
 using System.Diagnostics;
 using Dissertation.Persistence.Entities;
 using Dissertation.Common.Services.DirectoryService;
 using Dissertation.Persistence.Entities.Common;
 using Dissertation.Common.Services;
 
-namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands;
+namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanFile;
 
-public class VirusScanFileCommand : IRequest<ScanStatus>
+public class SystemVirusScanFileCommand : IRequest<SystemVirusScanFileDto>
 {
     public IFormFile File { get; set; } = default!;
 }
 
-public class VirusScanFileCommandHandler : IRequestHandler<VirusScanFileCommand, ScanStatus>
+public class VirusScanFileCommandHandler : IRequestHandler<SystemVirusScanFileCommand, SystemVirusScanFileDto>
 {
     private readonly IFileService _fileService;
     private readonly IScanInfoService _scanInfoService;
     private readonly IApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
     public VirusScanFileCommandHandler(IFileService fileService, IApplicationDbContext context,
-        IScanInfoService scanInfoService) =>
-            (_fileService, _context, _scanInfoService) = (fileService, context, scanInfoService);
+        IScanInfoService scanInfoService, IMapper mapper) =>
+            (_fileService, _context, _scanInfoService, _mapper) = (fileService, context, scanInfoService, mapper);
     
-    public async Task<ScanStatus> Handle(VirusScanFileCommand request, CancellationToken cancellationToken)
+    public async Task<SystemVirusScanFileDto> Handle(SystemVirusScanFileCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request.File);
 
@@ -43,10 +45,7 @@ public class VirusScanFileCommandHandler : IRequestHandler<VirusScanFileCommand,
         incident.FileName = fileName;
         incident.FolderName = _scanInfoService.FileStorageFolderName;
 
-        string filePath = incident.FullPath;
-
         using var process = new Process();
-        var fileInfo = new FileInfo(filePath);
         var processStartInfo = new ProcessStartInfo(_scanInfoService.AntivirusScanInSystemCommand)
         {
             Arguments = $"-Scan -ScanType 3 -File \"{incident.FullPath}\" -Timeout 1 -DisableRemediation",
@@ -60,9 +59,11 @@ public class VirusScanFileCommandHandler : IRequestHandler<VirusScanFileCommand,
         process.Start();
         await process.WaitForExitAsync(cancellationToken);
         var result = process.ExitCode == 0 
-                ? ScanStatus.Clear 
-                : ScanStatus.Analysis;
+                ? SystemScanStatus.Clear 
+                : SystemScanStatus.Analysis;
 
-        return result;
+        incident.Status = result;
+
+        return _mapper.Map<SystemVirusScanFileDto>(incident);
     }
 }

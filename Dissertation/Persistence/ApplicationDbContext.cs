@@ -17,11 +17,16 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
     }
 
+    #region Respondent
     public DbSet<Analyst> Analysts { get; set; }
     public DbSet<CyberSecuritySpecialist> CyberSecuritySpecialists { get; set; }
-    public DbSet<FileIncident> Executors { get; set; }
-    //public DbSet<Plan> Plans { get; set; }
-    //public DbSet<ResponseToolInfo> ResponseToolInfo { get; set; }
+    #endregion
+
+    #region File
+    public DbSet<FileIncident> FileIncidents { get; set; }
+    public DbSet<FileDetails> FileDetails { get; set; }
+    public DbSet<VirusTotalReportDetails> VirusTotalReportDetails { get; set; }
+    #endregion
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

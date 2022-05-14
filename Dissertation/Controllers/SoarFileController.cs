@@ -1,7 +1,7 @@
 ﻿using Dissertation.Infrastructure.Mediatr.SoarFile.Commands;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Queries;
 using Dissertation.Persistence.Entities;
-using Dissertation.Persistence.Entities.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VirusTotalNet.Results;
@@ -13,7 +13,7 @@ public class SoarFileController : ApiControllerBase
 {
     [HttpPost]
     [RequestSizeLimit(bytes: 100_000_000)]
-    public async Task<ScanStatus> VirusScan([FromForm] VirusScanFileCommand command)
+    public async Task<SystemVirusScanFileDto> SystemVirusScan([FromForm] SystemVirusScanFileCommand command)
         => await Mediator.Send(command);
 
     [HttpPost]

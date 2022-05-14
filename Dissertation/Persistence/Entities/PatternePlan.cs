@@ -5,7 +5,7 @@ using System;
 namespace Dissertation.Persistence.Entities;
 
 /// <summary>План реагирования на инциденты</summary>
-public class PatternePlan : BaseModel, IPlan
+public class PatternePlan : BaseIdentity, IPlan
 {
     public string Content { get; set; } = null!;
     //public virtual ResponseToolInfo? ResponseToolInfo { get; set; }

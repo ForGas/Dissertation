@@ -6,7 +6,7 @@ namespace Dissertation.Persistence.Entities;
 /// <summary>
 /// Исполнитель
 /// </summary>
-public class Executor : BaseModel
+public class Executor : BaseIdentity
 {
     public Guid PersonId { get; set; }
     //public virtual PerformancePlan? PerformancePlan { get; set; }

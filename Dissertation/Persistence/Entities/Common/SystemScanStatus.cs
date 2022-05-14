@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Dissertation.Persistence.Entities.Common;
 
 [JsonConverter(typeof(StringEnumConverter))]
-public enum ScanStatus
+public enum SystemScanStatus
 {
     [EnumMember(Value = "Нет определения")]
     [Display(Name = "Нет определения")]
