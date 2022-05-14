@@ -10,6 +10,7 @@
 		<PackageReference Include="Accord" Version="3.8.0" />
 		<PackageReference Include="Accord.MachineLearning" Version="3.8.0" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.1" />
 		<PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
 		<PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
 		<PackageReference Include="Leaf.xNet" Version="5.2.10" />
@@ -36,6 +37,7 @@
 
 	<ItemGroup>
 		<Folder Include="Files\" />
+		<Folder Include="Persistence\Configurations\" />
 	</ItemGroup>
 
 </Project>

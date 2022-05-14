@@ -18,6 +18,8 @@ using Dissertation.Infrastructure.Common;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.HttpOverrides;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 
 namespace Dissertation;
 
@@ -38,6 +40,12 @@ public class Startup
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            })
+            .AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+                fv.ImplicitlyValidateRootCollectionElements = true;
+                fv.AutomaticValidationEnabled = false;
             });
 
         services.Configure<ForwardedHeadersOptions>(options =>
@@ -77,6 +85,7 @@ public class Startup
                 .AllowAnyHeader());
         });
 
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
 

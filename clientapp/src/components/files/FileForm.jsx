@@ -5,25 +5,28 @@ import { useInput } from '../hooks/useInput'
 export const FileForm = () => {
     const [fileProps, resetForm] = useInput([]);
 
-    // useEffect(() => {
-    //     fetch('')
-    //     .then(response => response.json())
-    //     .then(setData)
-    //     .cath(console.error)
-    // }, [])
-
     const submit = e => {
         e.preventDefault();
-        console.log(fileProps.value);
-        console.log(fileProps);
-        console.log("gg");
+
+        fetch('/api/soarFile/VirusScan', {
+            referrerPolicy: 'no-referrer',
+            method: 'POST',
+            url: '/',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            body: JSON.stringify(fileProps.value),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+            });
+
         resetForm();
     }
 
     return (
         <>
-             <Form>
-                 <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+            <Form>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <Label>Sending a file for virus scan</Label >
                     <Col sm={5}>
                         <Input {...fileProps} id="formFile" type="file" name="file" placeholder="Enter file" className="mb-3" />

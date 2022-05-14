@@ -14,7 +14,7 @@ export default function App() {
                     <Route index element={<Home />} />
                     <Route path='/files' element={<Files />} />
                     <Route path='/files/form' element={<FileForm />} />
-                    <Route path="*" element={<NotFoundPage />} />
+                    {/* <Route path="*" element={<NotFoundPage />} /> */}
                 </Route>    
             </Routes> 
         </>  

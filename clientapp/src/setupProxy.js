@@ -2,6 +2,7 @@
 
 const context = [
     "/api",
+    "/files"
 ];
 
 module.exports = function (app) {

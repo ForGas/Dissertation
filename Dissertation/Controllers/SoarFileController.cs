@@ -1,5 +1,6 @@
 ﻿using Dissertation.Infrastructure.Mediatr.SoarFile.Commands;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Queries;
+using Dissertation.Persistence.Entities;
 using Dissertation.Persistence.Entities.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +30,15 @@ public class SoarFileController : ApiControllerBase
         => await Mediator.Send(command);
 
     [HttpGet]
-    public string Test()
+    public FileIncident Test()
     {
-        return "Test";
+        var test = new FileIncident()
+        {
+            Id = Guid.NewGuid(),
+            FullPath = "test",
+            FolderName = "dsadas"
+        };
+
+        return test;
     }
 }

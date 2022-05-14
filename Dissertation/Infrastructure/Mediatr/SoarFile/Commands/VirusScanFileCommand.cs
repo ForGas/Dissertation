@@ -10,8 +10,6 @@ namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands;
 public class VirusScanFileCommand : IRequest<ScanStatus>
 {
     public IFormFile File { get; set; } = default!;
-    public string IpAddrees { get; set; } = default!;
-    public string Domain { get; set; } = default!;
 }
 
 public class VirusScanFileCommandHandler : IRequestHandler<VirusScanFileCommand, ScanStatus>
@@ -41,8 +39,6 @@ public class VirusScanFileCommandHandler : IRequestHandler<VirusScanFileCommand,
             await request.File.CopyToAsync(fileStream, CancellationToken.None);
         }
 
-        incident.Domain = request.Domain;
-        incident.IpAddrees = request.IpAddrees;
         incident.FullPath = fullPath;
         incident.FileName = fileName;
         incident.FolderName = _scanInfoService.FileStorageFolderName;
