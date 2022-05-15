@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using System.Text.Json.Serialization;
 
 namespace Dissertation;
 
@@ -40,6 +41,10 @@ public class Startup
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+
             })
             .AddFluentValidation(fv =>
             {

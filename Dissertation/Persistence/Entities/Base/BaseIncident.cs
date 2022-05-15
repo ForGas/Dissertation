@@ -6,7 +6,7 @@ namespace Dissertation.Persistence.Entities;
 
 public abstract class BaseIncident : AuditableEntity, IIncident
 {
-    public Priority Priority { get; set; }
+    public Priority Priority { get; set; } = Priority.Low;
     public string IpAddrees { get; set; }
     public string Domain { get; set; }
     public IncidentType TypeName => IncidentType.NotDefined;

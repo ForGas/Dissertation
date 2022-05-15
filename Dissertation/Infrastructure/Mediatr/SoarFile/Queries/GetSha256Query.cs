@@ -28,8 +28,8 @@ namespace Dissertation.Infrastructure.Mediatr.SoarFile.Queries
 
             var stream = request.File.OpenReadStream();
 
-            using SHA256 sHA = SHA256.Create();
-            var buffer = await sHA.ComputeHashAsync(stream);
+            using SHA256 sha = SHA256.Create();
+            var buffer = await sha.ComputeHashAsync(stream);
 
             var stringBuilder = new StringBuilder(buffer.Length * 2);
             foreach (byte b in buffer)

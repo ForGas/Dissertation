@@ -1,17 +1,14 @@
 ﻿using MediatR;
 using AutoMapper;
 using System.Diagnostics;
+using Dissertation.Common.Services;
 using Dissertation.Persistence.Entities;
 using Dissertation.Common.Services.DirectoryService;
 using Dissertation.Persistence.Entities.Common;
-using Dissertation.Common.Services;
 
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanFile;
 
-public class SystemVirusScanFileCommand : IRequest<SystemVirusScanFileDto>
-{
-    public IFormFile File { get; set; } = default!;
-}
+public record class SystemVirusScanFileCommand(IFormFile File) : IRequest<SystemVirusScanFileDto>;
 
 public class VirusScanFileCommandHandler : IRequestHandler<SystemVirusScanFileCommand, SystemVirusScanFileDto>
 {
@@ -63,6 +60,9 @@ public class VirusScanFileCommandHandler : IRequestHandler<SystemVirusScanFileCo
                 : SystemScanStatus.Analysis;
 
         incident.Status = result;
+
+        _context.FileIncidents.Add(incident);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<SystemVirusScanFileDto>(incident);
     }
