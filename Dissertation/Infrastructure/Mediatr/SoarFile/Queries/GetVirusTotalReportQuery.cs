@@ -4,40 +4,32 @@ using Newtonsoft.Json;
 using VirusTotalNet.Results;
 using Dissertation.Common.Services;
 
-namespace Dissertation.Infrastructure.Mediatr.SoarFile.Queries
+namespace Dissertation.Infrastructure.Mediatr.SoarFile.Queries;
+
+public record class GetVirusTotalReportQuery(string ResourceId) : IRequest<string>;
+
+public class GetVirusTotalReportQueryHandler : IRequestHandler<GetVirusTotalReportQuery, string>
 {
-    public class GetVirusTotalReportQuery : IRequest<string>
+    private readonly IScanInfoService _scanInfoService;
+    private readonly IApplicationDbContext _context;
+
+    public GetVirusTotalReportQueryHandler(IApplicationDbContext context,
+    IScanInfoService scanInfoService) =>
+        (_context, _scanInfoService) = (context, scanInfoService);
+
+    public async Task<string> Handle(GetVirusTotalReportQuery request, CancellationToken cancellationToken)
     {
-        public bool AllInfo { get; set; }
-        public Guid ScanResultId { get; set; }
-        public string ResourceId { get; set; }
-    }
+        var client = new RestClient(_scanInfoService.VirusTotalReportUrl);
+        var virusTotalrequest = new RestRequest();
 
-    public class GetVirusTotalReportQueryHandler : IRequestHandler<GetVirusTotalReportQuery, string>
-    {
-        private readonly IScanInfoService _scanInfoService;
-        private readonly IApplicationDbContext _context;
+        virusTotalrequest.AddQueryParameter("apikey", _scanInfoService.VirusTotalApiKey);
+        virusTotalrequest.AddQueryParameter("resource", request.ResourceId);
+        virusTotalrequest.AddQueryParameter("allinfo", "false");
 
-        public GetVirusTotalReportQueryHandler(IApplicationDbContext context,
-        IScanInfoService scanInfoService) =>
-            (_context, _scanInfoService) = (context, scanInfoService);
+        var response = await client.ExecuteGetAsync(virusTotalrequest);
 
-        public async Task<string> Handle(GetVirusTotalReportQuery request, CancellationToken cancellationToken)
-        {
-            var client = new RestClient(_scanInfoService.VirusTotalReportUrl);
-            var virusTotalrequest = new RestRequest();
+        var result = JsonConvert.SerializeObject(response.Content);
 
-            //string info = request.AllInfo ? "true" : "false";
-
-            virusTotalrequest.AddQueryParameter("apikey", _scanInfoService.VirusTotalApiKey);
-            virusTotalrequest.AddQueryParameter("resource", request.ResourceId);
-            virusTotalrequest.AddQueryParameter("allinfo", request.AllInfo);
-
-            var response = await client.ExecuteGetAsync(virusTotalrequest);
-
-            var result = JsonConvert.SerializeObject(response.Content);
-
-            return response.Content;
-        }
+        return response.Content;
     }
 }

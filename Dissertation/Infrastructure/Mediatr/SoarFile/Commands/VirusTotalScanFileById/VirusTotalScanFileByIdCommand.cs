@@ -2,40 +2,36 @@
 using AutoMapper;
 using Newtonsoft.Json;
 using Dissertation.Common.Services;
-using Microsoft.EntityFrameworkCore;
 using Dissertation.Persistence.Entities;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Common;
+using Dissertation.Common.Services.DirectoryService;
 
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFileById;
 
 public record class VirusTotalScanFileByIdCommand(Guid FileIncidentId) : IRequest<Unit>;
 
-public class VirusTotalScanFileByIdCommandHandler : IRequestHandler<VirusTotalScanFileByIdCommand, Unit>
+public class VirusTotalScanFileByIdCommandHandler 
+    : BaseVirusScanFileHandler, IRequestHandler<VirusTotalScanFileByIdCommand, Unit>
 {
-    private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IScanInfoService _scanInfoService;
 
-    public VirusTotalScanFileByIdCommandHandler(IApplicationDbContext context,
-        IMapper mapper, IScanInfoService scanInfoService) =>
-          (_context, _mapper, _scanInfoService) = (context, mapper, scanInfoService);
+    public VirusTotalScanFileByIdCommandHandler(
+            IFileService fileService,
+            IMapper mapper,
+            IApplicationDbContext context,
+            IScanInfoService scanInfoService
+        ) : base(fileService, context, scanInfoService) => (_mapper) = (mapper);
 
     public async Task<Unit> Handle(VirusTotalScanFileByIdCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request.FileIncidentId);
 
-        var incident = await _context.FileIncidents.SingleOrDefaultAsync(x => x.Id == request.FileIncidentId);
+        var incident = await _context.FileIncidents.FindAsync(request.FileIncidentId);
 
-        var data = new[]
-        {
-            new KeyValuePair<string, string>("apikey", _scanInfoService.VirusTotalApiKey),
-            new KeyValuePair<string, string>("file", incident.FullPath),
-        };
+        var content = await GetReportDetailsByFilePathAsync(incident.FullPath);
 
-        using var client = new HttpClient();
-        using var result = await client.PostAsync(_scanInfoService.VirusTotalScanUrl, new FormUrlEncodedContent(data));
-        var content = await result.Content.ReadAsStringAsync(CancellationToken.None);
-
-        var scanResult = JsonConvert.DeserializeObject<VirusTotalScanResultDto>(content);
+        var scanResult = JsonConvert.DeserializeObject<VirusTotalScanResultDto>(content)
+            ?? new VirusTotalScanResultDto();
 
         var fileDetails = _mapper.Map<FileDetails>(scanResult);
         var report = _mapper.Map<VirusTotalReportDetails>(scanResult);
