@@ -7,4 +7,5 @@ public class VirusTotalReportDetails : AuditableEntity
     public string ScanId { get; set; } = null!;
     public string Resource { get; set; } = null!;
     public string Permalink { get; set; } = null!;
+    public string? JsonContent { get; set; }
 }
