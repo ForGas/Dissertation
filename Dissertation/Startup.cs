@@ -20,8 +20,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using FluentValidation.AspNetCore;
 using FluentValidation;
-using System.Text.Json.Serialization;
 
+#nullable disable
 namespace Dissertation;
 
 public class Startup
@@ -41,10 +41,8 @@ public class Startup
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-
             })
             .AddFluentValidation(fv =>
             {
@@ -55,8 +53,7 @@ public class Startup
 
         services.Configure<ForwardedHeadersOptions>(options =>
         {
-            options.ForwardedHeaders =
-                ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
         });
 
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -81,7 +78,9 @@ public class Startup
                             }));
 
         services.AddHangfireServer();
-
+        services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
+        //services.AddMemoryCache();
+        services.AddHttpContextAccessor();
         services.AddCors(c =>
         {
             c.AddPolicy("AllowOrigin", options => options
@@ -95,7 +94,7 @@ public class Startup
         services.AddMediatR(Assembly.GetExecutingAssembly());
 
         services.AddScoped<IApplicationDbContext>(provider => provider
-            .GetService<ApplicationDbContext>() ?? throw new Exception());
+            .GetService<ApplicationDbContext>());
 
         services.Configure<EmailHostSettings>(Configuration.GetSection("EmailHostSettings"));
 
@@ -136,6 +135,7 @@ public class Startup
 
         app.UseAuthorization();
 
+        app.UseHealthChecks("/health");
         app.UseHangfireDashboard("/hangfire");
 
         app.UseEndpoints(endpoints =>
