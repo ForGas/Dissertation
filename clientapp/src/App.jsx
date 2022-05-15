@@ -5,6 +5,7 @@ import { Files } from './components/pages/Files';
 import { Layout } from './components/pages/Layout';
 import { NotFoundPage } from './components/pages/NotFoundPage';
 import { FileForm } from './components/files/FileForm';
+import routes from './constants/routes';
 
 export default function App() {
     return (
@@ -15,9 +16,13 @@ export default function App() {
                     <Route path='/files' element={<Files />} />
                     <Route path='/files/form' element={<FileForm />} />
                     {/* <Route path="*" element={<NotFoundPage />} /> */}
-                </Route>    
-            </Routes> 
-        </>  
+
+                    {routes.map(({ path, component, exact }) => (
+                        <Route key={path} exact={exact} path={path} component={component} />
+                    ))}
+                </Route>
+            </Routes>
+        </>
     );
 }
 
