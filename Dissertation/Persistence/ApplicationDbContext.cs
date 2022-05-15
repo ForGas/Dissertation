@@ -3,8 +3,8 @@ using Dissertation.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Dissertation.Persistence;
 #nullable disable
+namespace Dissertation.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {

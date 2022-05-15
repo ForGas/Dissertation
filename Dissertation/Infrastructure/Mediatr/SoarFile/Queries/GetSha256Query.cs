@@ -4,42 +4,37 @@ using MediatR;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Dissertation.Infrastructure.Mediatr.SoarFile.Queries
+namespace Dissertation.Infrastructure.Mediatr.SoarFile.Queries;
+
+public record class GetSha256Query(IFormFile File) : IRequest<string>;
+
+public class GetSha256QueryHandler : IRequestHandler<GetSha256Query, string>
 {
-    public class GetSha256Query : IRequest<string>
+    private readonly IFileService _fileService;
+    private readonly IScanInfoService _scanInfoService;
+    private readonly IApplicationDbContext _context;
+
+    public GetSha256QueryHandler(IFileService fileService, IApplicationDbContext context,
+    IScanInfoService scanInfoService) =>
+        (_fileService, _context, _scanInfoService) = (fileService, context, scanInfoService);
+
+    public async Task<string> Handle(GetSha256Query request, CancellationToken cancellationToken)
     {
-        public IFormFile File { get; set; } = default!;
-    }
+        ArgumentNullException.ThrowIfNull(request.File);
 
-    public class GetSha256QueryHandler
-       : IRequestHandler<GetSha256Query, string>
-    {
-        private readonly IFileService _fileService;
-        private readonly IScanInfoService _scanInfoService;
-        private readonly IApplicationDbContext _context;
+        var stream = request.File.OpenReadStream();
 
-        public GetSha256QueryHandler(IFileService fileService, IApplicationDbContext context,
-        IScanInfoService scanInfoService) =>
-            (_fileService, _context, _scanInfoService) = (fileService, context, scanInfoService);
+        using SHA256 sha = SHA256.Create();
+        var buffer = await sha.ComputeHashAsync(stream);
 
-        public async Task<string> Handle(GetSha256Query request, CancellationToken cancellationToken)
+        var stringBuilder = new StringBuilder(buffer.Length * 2);
+        foreach (byte b in buffer)
         {
-            ArgumentNullException.ThrowIfNull(request.File);
-
-            var stream = request.File.OpenReadStream();
-
-            using SHA256 sha = SHA256.Create();
-            var buffer = await sha.ComputeHashAsync(stream);
-
-            var stringBuilder = new StringBuilder(buffer.Length * 2);
-            foreach (byte b in buffer)
-            {
-                stringBuilder.AppendFormat("{0:x2}", b);
-            }
-
-            var result = stringBuilder.ToString();
-
-            return result;
+            stringBuilder.AppendFormat("{0:x2}", b);
         }
+
+        var result = stringBuilder.ToString();
+
+        return result;
     }
 }
