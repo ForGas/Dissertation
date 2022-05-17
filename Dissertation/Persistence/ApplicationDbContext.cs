@@ -1,7 +1,7 @@
-﻿using Dissertation.Common.Services;
+﻿using System.Reflection;
+using Dissertation.Common.Services;
 using Dissertation.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 #nullable disable
 namespace Dissertation.Persistence;
@@ -18,8 +18,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
 
     #region Respondent
-    public DbSet<Analyst> Analysts { get; set; }
-    public DbSet<CyberSecuritySpecialist> CyberSecuritySpecialists { get; set; }
     #endregion
 
     #region File

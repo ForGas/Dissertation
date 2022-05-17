@@ -24,16 +24,16 @@ public class SoarFileController : ApiControllerBase
         => await Mediator.Send(command);
 
     [HttpGet]
-    public async Task<string> GetVirusTotalReport([FromQuery] GetVirusTotalReportQuery command)
-        => await Mediator.Send(command);
+    public async Task<string> GetVirusTotalReport([FromQuery] GetVirusTotalReportQuery query)
+        => await Mediator.Send(query);
 
     [HttpPost]
     public async Task<string> CreateVirusTotalReport([FromQuery] CreateVirusTotalReportCommand command)
         => await Mediator.Send(command);
 
     [HttpGet]
-    public async Task<string> GetSha256([FromForm] GetSha256Query command)
-        => await Mediator.Send(command);
+    public async Task<string> GetSha256([FromForm] GetSha256Query query)
+        => await Mediator.Send(query);
 
     [HttpPost]
     public async Task<Unit> VirusTotalScanById([FromQuery] VirusTotalScanFileByIdCommand command)

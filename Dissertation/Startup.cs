@@ -26,10 +26,7 @@ namespace Dissertation;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
+    public Startup(IConfiguration configuration) => (Configuration) = (configuration);
 
     public IConfiguration Configuration { get; }
 
@@ -52,9 +49,8 @@ public class Startup
             });
 
         services.Configure<ForwardedHeadersOptions>(options =>
-        {
-            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-        });
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        );
 
         services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),

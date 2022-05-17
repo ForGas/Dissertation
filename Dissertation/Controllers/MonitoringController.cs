@@ -1,8 +1,6 @@
-﻿using Dissertation.Infrastructure.Mediatr.Monitoring.Queries;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Dissertation.Infrastructure.Mediatr.Monitoring.Queries;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Dissertation.Controllers
 {
