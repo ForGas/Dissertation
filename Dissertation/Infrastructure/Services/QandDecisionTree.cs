@@ -263,23 +263,3 @@ public class RespondentStatistics : AuditableEntity
 /// 1) null null Да Нет Нет Да null
 /// 2) null null null Нет Нет Да null
 /// </summary>
-
-
-
-[JsonConverter(typeof(StringEnumConverter))]
-public enum StatisticsType
-{
-    File = 1,
-    Network = 2,
-}
-
-[JsonConverter(typeof(StringEnumConverter))]
-public enum Workload
-{
-    Neutral = 0,
-    Low = 1,
-    Normal = 2,
-    High = 3,
-    Exceed = 4,
-    Critical = 5,
-}
