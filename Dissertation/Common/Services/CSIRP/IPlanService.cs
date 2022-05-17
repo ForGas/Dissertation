@@ -5,7 +5,7 @@ namespace Dissertation.Common.Services.CSIRP;
 
 public interface IPlanService
 {
-    Plan GetPlan(PlanTypeStrategy type, IIncident incident);
+    PlannedResponsePlan GetPlan(PlanTypeStrategy type, IIncident incident);
     IPlanReplyToolStrategy GetPlanReplyToolStrategy(PlanTypeStrategy type, IIncident incident);
 }
 

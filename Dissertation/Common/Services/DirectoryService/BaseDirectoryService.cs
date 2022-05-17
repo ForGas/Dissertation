@@ -1,5 +1,6 @@
 ﻿namespace Dissertation.Common.Services.DirectoryService;
 
+#nullable disable
 public abstract class BaseDirectoryService : IFileService
 {
     protected readonly string _directoryPath;
@@ -10,7 +11,7 @@ public abstract class BaseDirectoryService : IFileService
 
     public string GetDirectoryPath() => _directoryPath;
  
-    public string? GetFilePath(string fileName)
+    public string GetFilePath(string fileName)
     {
         return string.IsNullOrEmpty(fileName)
             ? null
@@ -25,7 +26,7 @@ public abstract class BaseDirectoryService : IFileService
     public bool IsFileExists(string fileName)
         => File.Exists(GetFilePath(fileName));
 
-    public List<string>? FindFilesNameByExtension(string approximateFileName)
+    public List<string> FindFilesNameByExtension(string approximateFileName)
     {
         return !string.IsNullOrEmpty(approximateFileName)
             ? null

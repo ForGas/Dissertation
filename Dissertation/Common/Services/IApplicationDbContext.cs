@@ -8,8 +8,6 @@ public interface IApplicationDbContext
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
     #region Respondent
-    DbSet<Analyst> Analysts { get; set; }
-    DbSet<CyberSecuritySpecialist> CyberSecuritySpecialists { get; set; }
     #endregion
 
     #region File

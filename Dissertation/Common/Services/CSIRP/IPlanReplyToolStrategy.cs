@@ -4,7 +4,7 @@ namespace Dissertation.Common.Services.CSIRP;
 
 public interface IPlanReplyToolStrategy
 {
-    Plan GetPlan();
+    PlannedResponsePlan GetPlan();
     void Launch();
     IIncident GetIncident();
 }

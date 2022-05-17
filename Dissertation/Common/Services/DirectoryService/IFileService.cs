@@ -2,6 +2,6 @@
 
 public interface IFileService : IPath, ICheckFile
 {
-    public List<string>? FindFilesNameByExtension(string approximateFileName);
+    public List<string> FindFilesNameByExtension(string approximateFileName);
     public string GetExtensionByFileName(string fileName);
 }
