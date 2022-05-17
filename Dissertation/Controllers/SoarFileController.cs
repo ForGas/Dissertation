@@ -24,8 +24,9 @@ public class SoarFileController : ApiControllerBase
         => await Mediator.Send(command);
 
     [HttpGet]
-    public async Task<string> GetVirusTotalReport([FromQuery] GetVirusTotalReportQuery query)
-        => await Mediator.Send(query);
+    [Route("{id}")]
+    public async Task<string> GetVirusTotalReport([FromRoute] Guid id)
+        => await Mediator.Send(new GetVirusTotalReportQuery(id));
 
     [HttpPost]
     public async Task<string> CreateVirusTotalReport([FromQuery] CreateVirusTotalReportCommand command)

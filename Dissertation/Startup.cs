@@ -32,21 +32,22 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers()
-            .AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-            })
-            .AddFluentValidation(fv =>
-            {
-                fv.RegisterValidatorsFromAssemblyContaining<Startup>();
-                fv.ImplicitlyValidateRootCollectionElements = true;
-                fv.AutomaticValidationEnabled = false;
-            });
+        services.AddControllers(options =>
+        {
+            options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        }).AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.Converters.Add(new StringEnumConverter());
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+        }).AddFluentValidation(fv =>
+        {
+            fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+            fv.ImplicitlyValidateRootCollectionElements = true;
+            fv.AutomaticValidationEnabled = false;
+        });
 
         services.Configure<ForwardedHeadersOptions>(options =>
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -55,10 +56,10 @@ public class Startup
         services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+        services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
 
         string hfDbConnection = Configuration.GetConnectionString("HangfireDbConnection");
         services.AddDbContext<HangfireDbContext>(opt => opt.UseSqlServer(hfDbConnection));
-
         services.AddHangfire(configuration =>
                     configuration
                             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -72,40 +73,32 @@ public class Startup
                                 UseRecommendedIsolationLevel = true,
                                 DisableGlobalLocks = true
                             }));
-
         services.AddHangfireServer();
-        services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
+
         //services.AddMemoryCache();
         services.AddHttpContextAccessor();
         services.AddCors(c =>
-        {
             c.AddPolicy("AllowOrigin", options => options
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
-        });
+                .AllowAnyHeader())
+        );
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
 
-        services.AddScoped<IApplicationDbContext>(provider => provider
-            .GetService<ApplicationDbContext>());
-
         services.Configure<EmailHostSettings>(Configuration.GetSection("EmailHostSettings"));
 
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IScanInfoService, ScanInfoService>();
         services.AddTransient<IFileService, ProjectDirectoryService>();
         services.AddTransient<IEmailService, EmailService>();
 
-        services.AddScoped<IApplicationDbContext>(provider => provider
-            .GetService<ApplicationDbContext>());
-
         services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dissertation", Version = "v1" });
-        });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dissertation", Version = "v1" })
+        );
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -119,20 +112,15 @@ public class Startup
 
         app.UseForwardedHeaders();
         app.UseHttpsRedirection();
-
         app.UseRouting();
-
+        app.UseStaticFiles();
+        app.UseAuthorization();
+        app.UseHealthChecks("/health");
+        app.UseHangfireDashboard("/hangfire");
         app.UseCors(options => options
             .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader());
-
-        app.UseStaticFiles();
-
-        app.UseAuthorization();
-
-        app.UseHealthChecks("/health");
-        app.UseHangfireDashboard("/hangfire");
 
         app.UseEndpoints(endpoints =>
         {

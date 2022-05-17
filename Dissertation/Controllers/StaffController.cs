@@ -20,7 +20,7 @@ public class StaffController : ApiControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<StaffDto> GetById([FromQuery] Guid id)
+    public async Task<StaffDto> GetById([FromRoute] Guid id)
         => await Mediator.Send(new GetStaffByIdQuery(id));
 
     [HttpGet]
