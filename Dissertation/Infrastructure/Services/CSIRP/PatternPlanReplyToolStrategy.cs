@@ -12,12 +12,10 @@ public class PatternPlanReplyToolStrategy : IPlanReplyToolStrategy
 
     public IIncident GetIncident() => _incident;
 
-    public Plan GetPlan()
+    public PlannedResponsePlan GetPlan()
     {
-        return new Plan
+        return new PlannedResponsePlan
         {
-            PathMap = "a1->a2->b3",
-            Duration = DateTime.UtcNow.AddHours(1) - DateTime.UtcNow
         };
     }
 

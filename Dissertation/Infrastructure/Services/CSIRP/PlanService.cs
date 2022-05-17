@@ -5,7 +5,7 @@ namespace Dissertation.Infrastructure.Services.CSIRP;
 
 public class PlanService : IPlanService
 {
-    public Plan GetPlan(PlanTypeStrategy type, IIncident incident)
+    public PlannedResponsePlan GetPlan(PlanTypeStrategy type, IIncident incident)
         => PlanStrategyFactory
             .GetStrategy(type, incident)
             .GetPlan();

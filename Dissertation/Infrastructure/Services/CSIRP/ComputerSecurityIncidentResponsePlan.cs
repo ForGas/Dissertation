@@ -18,7 +18,7 @@ public class ComputerSecurityIncidentResponsePlan : IComputerSecurityIncidentRes
     public void SetStrategyFactory(IPlanService strategy)
         => (_planService) = (strategy);
 
-    public Plan GetPlanFactory(PlanTypeStrategy type, BaseIncident incident)
+    public PlannedResponsePlan GetPlanFactory(PlanTypeStrategy type, BaseIncident incident)
         => _planService.GetPlan(type, incident);
 
     public IPlanReplyToolStrategy GetPlanReplyTool(PlanTypeStrategy type, BaseIncident incident)

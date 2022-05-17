@@ -1,6 +1,5 @@
 ﻿using Dissertation.Common.Services.CSIRP;
 using Dissertation.Persistence.Entities.Base;
-using System;
 
 namespace Dissertation.Persistence.Entities;
 
