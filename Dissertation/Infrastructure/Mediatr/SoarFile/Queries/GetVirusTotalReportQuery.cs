@@ -15,7 +15,7 @@ public class GetVirusTotalReportQueryHandler : IRequestHandler<GetVirusTotalRepo
 
     public async Task<string> Handle(GetVirusTotalReportQuery request, CancellationToken cancellationToken)
     {
-        var report = await _context.VirusTotalReportDetails.FindAsync(request.ReportId, cancellationToken);
+        var report = await _context.VirusTotalReportDetails.FindAsync(request.ReportId);
         return report.JsonContent;
     }
 }

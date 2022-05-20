@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Dissertation.Persistence.Entities;
 using Dissertation.Infrastructure.Mediatr.SoarFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Queries;
-using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.CreateVirusTotalReport;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFileById;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
 
 namespace Dissertation.Controllers;
 
@@ -28,15 +28,15 @@ public class SoarFileController : ApiControllerBase
     public async Task<string> GetVirusTotalReport([FromRoute] Guid id)
         => await Mediator.Send(new GetVirusTotalReportQuery(id));
 
-    [HttpPost]
-    public async Task<string> CreateVirusTotalReport([FromQuery] CreateVirusTotalReportCommand command)
+    [HttpPatch]
+    public async Task<Unit> FillUpVirusTotalReportById([FromQuery] FillUpVirusTotalReportByIdCommand command)
         => await Mediator.Send(command);
 
     [HttpGet]
     public async Task<string> GetSha256([FromForm] GetSha256Query query)
         => await Mediator.Send(query);
 
-    [HttpPost]
+    [HttpPut]
     public async Task<Unit> VirusTotalScanById([FromQuery] VirusTotalScanFileByIdCommand command)
         => await Mediator.Send(command);
 

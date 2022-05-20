@@ -7,24 +7,24 @@ using Microsoft.EntityFrameworkCore;
 using Dissertation.Persistence.Entities;
 using Dissertation.Persistence.Entities.Common;
 
-namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.CreateVirusTotalReport;
+namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
 
-public record class CreateVirusTotalReportCommand(string ResourceId) : IRequest<string>;
+public record class FillUpVirusTotalReportByIdCommand(Guid VirusTotalReportDetailId) : IRequest<Unit>;
 
-public class CreateVirusTotalReportCommandHandler : IRequestHandler<CreateVirusTotalReportCommand, string>
+public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVirusTotalReportByIdCommand, Unit>
 {
     private readonly IScanInfoService _scanInfoService;
     private readonly IApplicationDbContext _context;
 
-    public CreateVirusTotalReportCommandHandler(IApplicationDbContext context,
+    public FillUpVirusTotalReportByIdCommandHandler(IApplicationDbContext context,
     IScanInfoService scanInfoService) =>
         (_context, _scanInfoService) = (context, scanInfoService);
 
-    public async Task<string> Handle(CreateVirusTotalReportCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(FillUpVirusTotalReportByIdCommand request, CancellationToken cancellationToken)
     {
         var report = await _context.VirusTotalReportDetails
             .Include(x => x.FileDetails).ThenInclude(x => x.Incident)
-            .FirstOrDefaultAsync(x => x.Resource == request.ResourceId);
+            .FirstOrDefaultAsync(x => x.Id == request.VirusTotalReportDetailId);
 
         ArgumentNullException.ThrowIfNull(report);
 
@@ -32,7 +32,7 @@ public class CreateVirusTotalReportCommandHandler : IRequestHandler<CreateVirusT
         var virusTotalrequest = new RestRequest();
 
         virusTotalrequest.AddQueryParameter("apikey", _scanInfoService.VirusTotalApiKey);
-        virusTotalrequest.AddQueryParameter("resource", request.ResourceId);
+        virusTotalrequest.AddQueryParameter("resource", report.Resource);
         virusTotalrequest.AddQueryParameter("allinfo", "false");
 
         var response = await client.ExecuteGetAsync(virusTotalrequest);
@@ -57,6 +57,6 @@ public class CreateVirusTotalReportCommandHandler : IRequestHandler<CreateVirusT
         _context.FileIncidents.Update(incident);
         _ = await _context.SaveChangesAsync(cancellationToken);
 
-        return result;
+        return Unit.Value;
     }
 }
