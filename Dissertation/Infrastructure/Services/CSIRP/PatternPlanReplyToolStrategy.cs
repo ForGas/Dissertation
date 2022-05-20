@@ -16,6 +16,7 @@ public class PatternPlanReplyToolStrategy : IPlanReplyToolStrategy
     {
         return new PlannedResponsePlan
         {
+            
         };
     }
 

@@ -44,10 +44,11 @@ public abstract class BaseDecisionTreeLogic<T>
     private double _errorValue;
     private IApplicationDbContext _context;
     private DecisionTree _tree;
+    private bool _disposedValue;
     private readonly ID3Learning _decisionTreeLearningAlgorithm;
 
     protected Codification _codification;
-    protected readonly DataTable _data;
+    protected DataTable _data;
     protected int[][] inputs;
     protected int[] outputs;
 
@@ -96,7 +97,7 @@ public abstract class BaseDecisionTreeLogic<T>
         if (_data != null)
         {
             _data.Clear();
-            GC.SuppressFinalize(this);
+            _data.Dispose();
         }
     }
 }
