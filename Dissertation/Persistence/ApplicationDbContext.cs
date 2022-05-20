@@ -17,13 +17,25 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
     }
 
-    #region Respondent
-    #endregion
-
     #region File
     public DbSet<FileIncident> FileIncidents { get; set; }
     public DbSet<FileDetails> FileDetails { get; set; }
     public DbSet<VirusTotalReportDetails> VirusTotalReportDetails { get; set; }
+    #endregion
+
+    #region Network
+    public DbSet<NetworkIncident> NetworkIncidents { get; set; }
+    #endregion
+
+    #region Plan
+    public DbSet<PathMapContent> PathMapContents { get; set; }
+    public DbSet<PlannedResponsePlan> PlannedResponsePlans { get; set; }
+    #endregion
+
+    #region Respondent
+    public DbSet<Staff> Staffs { get; set; }
+    public DbSet<StaffStatistic> StaffStatistics { get; set; }
+    public DbSet<RespondentJobSample> RespondentJobSamples { get; set; }
     #endregion
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

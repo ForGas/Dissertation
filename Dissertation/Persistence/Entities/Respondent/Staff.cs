@@ -9,6 +9,5 @@ public class Staff : BaseIdentity
     public string FirstName { get; set; } = null!;
     public string MiddleName { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public virtual List<StaffStatistic>? Statistics { get; set; }
-    public virtual List<RespondentSampleModel>? RespondentSampleModels { get; set; }
+    public virtual List<StaffStatistic> Statistics { get; set; } = new();
 }

@@ -7,12 +7,24 @@ public interface IApplicationDbContext
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
-    #region Respondent
+    #region File
+    public DbSet<FileIncident> FileIncidents { get; set; }
+    public DbSet<FileDetails> FileDetails { get; set; }
+    public DbSet<VirusTotalReportDetails> VirusTotalReportDetails { get; set; }
     #endregion
 
-    #region File
-    DbSet<FileIncident> FileIncidents { get; set; }
-    DbSet<FileDetails> FileDetails { get; set; }
-    DbSet<VirusTotalReportDetails> VirusTotalReportDetails { get; set; }
+    #region Network
+    public DbSet<NetworkIncident> NetworkIncidents { get; set; }
+    #endregion
+
+    #region Plan
+    public DbSet<PathMapContent> PathMapContents { get; set; }
+    public DbSet<PlannedResponsePlan> PlannedResponsePlans { get; set; }
+    #endregion
+
+    #region Respondent
+    public DbSet<Staff> Staffs { get; set; }
+    public DbSet<StaffStatistic> StaffStatistics { get; set; }
+    public DbSet<RespondentJobSample> RespondentJobSamples { get; set; }
     #endregion
 }
