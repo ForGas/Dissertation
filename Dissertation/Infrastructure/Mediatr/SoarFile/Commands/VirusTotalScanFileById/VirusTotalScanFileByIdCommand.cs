@@ -27,11 +27,9 @@ public class VirusTotalScanFileByIdCommandHandler
         ArgumentNullException.ThrowIfNull(request.FileIncidentId);
 
         var incident = await _context.FileIncidents.FindAsync(request.FileIncidentId);
-
         var content = await GetReportDetailsByFilePathAsync(incident.FullPath);
 
-        var scanResult = JsonConvert.DeserializeObject<VirusTotalScanResultDto>(content)
-            ?? new VirusTotalScanResultDto();
+        var scanResult = JsonConvert.DeserializeObject<VirusTotalScanResultDto>(content) ?? new();
 
         var fileDetails = _mapper.Map<FileDetails>(scanResult);
         var report = _mapper.Map<VirusTotalReportDetails>(scanResult);
@@ -40,8 +38,7 @@ public class VirusTotalScanFileByIdCommandHandler
 
         _context.FileDetails.Add(fileDetails);
         _context.VirusTotalReportDetails.Add(report);
-
-        await _context.SaveChangesAsync(cancellationToken);
+        _ = await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

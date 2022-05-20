@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Dissertation.Common.Services;
 using Microsoft.EntityFrameworkCore;
+using Dissertation.Persistence.Entities;
+using Dissertation.Persistence.Entities.Common;
 
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.CreateVirusTotalReport;
 
@@ -21,7 +23,8 @@ public class CreateVirusTotalReportCommandHandler : IRequestHandler<CreateVirusT
     public async Task<string> Handle(CreateVirusTotalReportCommand request, CancellationToken cancellationToken)
     {
         var report = await _context.VirusTotalReportDetails
-            .FirstOrDefaultAsync(x=> x.Resource == request.ResourceId);
+            .Include(x => x.FileDetails).ThenInclude(x => x.Incident)
+            .FirstOrDefaultAsync(x => x.Resource == request.ResourceId);
 
         ArgumentNullException.ThrowIfNull(report);
 
@@ -44,10 +47,15 @@ public class CreateVirusTotalReportCommandHandler : IRequestHandler<CreateVirusT
             list.Add(virus);
         }
 
+        var incident = report.FileDetails.Incident;
+        incident.Status = list.Any(x => x.Detected) ? ScanStatus.Virus : ScanStatus.Clean;
+        incident.Priority = incident.Status == ScanStatus.Virus ? Priority.High : Priority.Low;
+
         var result = JsonConvert.SerializeObject(list);
         report.JsonContent = result;
         _context.VirusTotalReportDetails.Update(report);
-        await _context.SaveChangesAsync(cancellationToken);
+        _context.FileIncidents.Update(incident);
+        _ = await _context.SaveChangesAsync(cancellationToken);
 
         return result;
     }

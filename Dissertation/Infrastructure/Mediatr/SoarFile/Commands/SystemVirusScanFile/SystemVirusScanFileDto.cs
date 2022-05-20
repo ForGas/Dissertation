@@ -8,7 +8,7 @@ namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanF
 public class SystemVirusScanFileDto : IMapFrom<FileIncident>
 {
     public Guid Id { get; set; }
-    public SystemScanStatus Status { get; set; }
+    public ScanStatus Status { get; set; }
 
     public void Mapping(Profile profile)
     {
