@@ -1,6 +1,5 @@
-﻿using Dissertation.Persistence.Entities;
-using Dissertation.Persistence.Entities.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Dissertation.Persistence.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dissertation.Persistence.Configurations.File;
@@ -15,6 +14,7 @@ public class FileIncidentModelConfiguration : IEntityTypeConfiguration<FileIncid
         builder.Property(x => x.Id);
         builder.Property(x => x.IpAddrees).HasMaxLength(30);
         builder.Property(x => x.Domain).HasMaxLength(50);
+        builder.Property(x => x.IsSystemScanClean);
 
         builder.Ignore(x => x.TypeName);
 
@@ -22,7 +22,10 @@ public class FileIncidentModelConfiguration : IEntityTypeConfiguration<FileIncid
         builder.Property(x => x.FolderName).HasMaxLength(256).IsRequired();
         builder.Property(x => x.FullPath).HasMaxLength(256).IsRequired();
 
-        builder.Property(x => x.Status).HasDefaultValue(SystemScanStatus.NoDefinition).IsRequired();
+        builder.Property(x => x.Status)
+            .HasConversion<string>()
+            .HasDefaultValue(ScanStatus.NoDefinition)
+            .IsRequired();
 
         builder.HasOne(fi => fi.Details).WithOne(fd => fd.Incident)
             .HasForeignKey<FileDetails>(fd => fd.FileIncidentId);
