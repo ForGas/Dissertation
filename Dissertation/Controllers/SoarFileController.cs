@@ -7,6 +7,7 @@ using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFileById;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.CreateVirusHashInfoByZip;
 
 namespace Dissertation.Controllers;
 
@@ -38,6 +39,11 @@ public class SoarFileController : ApiControllerBase
 
     [HttpPut]
     public async Task<Unit> VirusTotalScanById([FromQuery] VirusTotalScanFileByIdCommand command)
+        => await Mediator.Send(command);
+
+    [HttpPost]
+    [RequestSizeLimit(bytes: 100_000_000)]
+    public async Task<Unit> CreateVirusHashInfoByZip([FromForm] CreateVirusHashInfoByZipCommand command)
         => await Mediator.Send(command);
 
     [HttpGet]

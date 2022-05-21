@@ -11,6 +11,7 @@ public interface IApplicationDbContext
     public DbSet<FileIncident> FileIncidents { get; set; }
     public DbSet<FileDetails> FileDetails { get; set; }
     public DbSet<VirusTotalReportDetails> VirusTotalReportDetails { get; set; }
+    public DbSet<VirusHashInfo> VirusHashInfo { get; set; }
     #endregion
 
     #region Network

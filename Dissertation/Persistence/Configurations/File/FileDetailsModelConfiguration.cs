@@ -12,9 +12,9 @@ public class FileDetailsModelConfiguration : IEntityTypeConfiguration<FileDetail
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id);
-        builder.Property(x => x.Sha256).HasMaxLength(3000);
-        builder.Property(x => x.Sha1).HasMaxLength(3000);
-        builder.Property(x => x.Md5).HasMaxLength(3000);
+        builder.Property(x => x.Sha256).HasMaxLength(64);
+        builder.Property(x => x.Sha1).HasMaxLength(40);
+        builder.Property(x => x.Md5).HasMaxLength(32);
 
         builder.HasOne(fd => fd.Report).WithOne(v => v.FileDetails)
                 .HasForeignKey<VirusTotalReportDetails>(v => v.FileDetailsId);
