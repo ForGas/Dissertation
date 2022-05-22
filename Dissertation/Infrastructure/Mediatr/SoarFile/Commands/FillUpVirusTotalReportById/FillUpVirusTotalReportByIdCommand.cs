@@ -6,6 +6,7 @@ using Dissertation.Common.Services;
 using Microsoft.EntityFrameworkCore;
 using Dissertation.Persistence.Entities;
 using Dissertation.Persistence.Entities.Common;
+using Newtonsoft.Json.Serialization;
 
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
 
@@ -51,7 +52,11 @@ public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVi
         incident.Status = list.Any(x => x.Detected) ? ScanStatus.Virus : ScanStatus.Clean;
         incident.Priority = incident.Status == ScanStatus.Virus ? Priority.High : Priority.Low;
 
-        var result = JsonConvert.SerializeObject(list);
+        var result = JsonConvert.SerializeObject(list, new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        });
+
         report.JsonContent = result;
         _context.VirusTotalReportDetails.Update(report);
         _context.FileIncidents.Update(incident);
