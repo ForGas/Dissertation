@@ -56,7 +56,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         }
 
         var result = await base.SaveChangesAsync(cancellationToken);
-
         return result;
     }
 

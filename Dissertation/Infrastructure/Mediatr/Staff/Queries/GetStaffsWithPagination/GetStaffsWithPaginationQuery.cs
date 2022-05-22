@@ -3,7 +3,7 @@ using Dissertation.Infrastructure.Common;
 
 namespace Dissertation.Infrastructure.Mediatr.Staff.Queries.GetStaffsWithPagination;
 
-public record class GetStaffsWithPaginationQuery() : IRequest<PaginatedList<StaffDto>>;
+public class GetStaffsWithPaginationQuery : PaginatedQuery, IRequest<PaginatedList<StaffDto>> { }
 
 
 public class GetStaffsWithPaginationQueryHandler : IRequestHandler<GetStaffsWithPaginationQuery, PaginatedList<StaffDto>>

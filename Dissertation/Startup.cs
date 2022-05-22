@@ -39,8 +39,8 @@ public class Startup
         {
             options.SerializerSettings.Converters.Add(new StringEnumConverter());
             options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             options.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
         }).AddFluentValidation(fv =>
         {
