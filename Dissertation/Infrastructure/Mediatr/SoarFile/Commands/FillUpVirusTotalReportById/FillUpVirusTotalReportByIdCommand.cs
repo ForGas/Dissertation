@@ -29,13 +29,12 @@ public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVi
 
         ArgumentNullException.ThrowIfNull(report);
 
-        using var client = new RestClient(_scanInfoService.VirusTotalReportUrl);
         var virusTotalrequest = new RestRequest();
-
         virusTotalrequest.AddQueryParameter("apikey", _scanInfoService.VirusTotalApiKey);
         virusTotalrequest.AddQueryParameter("resource", report.Resource);
         virusTotalrequest.AddQueryParameter("allinfo", "false");
 
+        using var client = new RestClient(_scanInfoService.VirusTotalReportUrl);
         var response = await client.ExecuteGetAsync(virusTotalrequest);
 
         dynamic jObject = JObject.Parse(response.Content ?? string.Empty);

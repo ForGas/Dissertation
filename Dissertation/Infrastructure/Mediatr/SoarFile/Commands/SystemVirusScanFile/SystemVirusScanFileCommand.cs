@@ -23,8 +23,9 @@ public class VirusScanFileCommandHandler
             IMapper mapper,
             IApplicationDbContext context,
             IScanInfoService scanInfoService,
-            ISender mediatr
-        ) : base(fileService, context, scanInfoService) => (_mapper, _mediatr) = (mapper, mediatr);
+            ISender mediatr,
+            IDateTime dateTime
+        ) : base(fileService, context, scanInfoService, dateTime) => (_mapper, _mediatr) = (mapper, mediatr);
 
     public async Task<SystemVirusScanFileDto> Handle(SystemVirusScanFileCommand request, CancellationToken cancellationToken)
     {

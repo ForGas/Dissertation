@@ -1,6 +1,7 @@
 ﻿using Dissertation.Common.Services;
 using Dissertation.Common.Services.DirectoryService;
 using Dissertation.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Common;
 
@@ -9,14 +10,20 @@ public abstract class BaseVirusScanFileHandler
     protected readonly IApplicationDbContext _context;
     protected readonly IFileService _fileService;
     protected readonly IScanInfoService _scanInfoService;
+    protected readonly IDateTime _dateTime;
 
-    public BaseVirusScanFileHandler(IFileService fileService,
-    IApplicationDbContext context, IScanInfoService scanInfoService) =>
-        (_fileService, _context, _scanInfoService) = (fileService, context, scanInfoService);
+    public BaseVirusScanFileHandler(
+        IFileService fileService,
+        IApplicationDbContext context, 
+        IScanInfoService scanInfoService,
+        IDateTime dateTime) =>
+        (_fileService, _context, _scanInfoService, _dateTime) = (fileService, context, scanInfoService, dateTime);
 
     protected async Task<FileIncident> GetFileIncidentByFileAsync(IFormFile file)
     {
         var incident = new FileIncident();
+        var count = await _context.FileIncidents.CountAsync();
+        var date = _dateTime.Now;
 
         var fileExtention = Path.GetExtension(file.FileName);
         var fileName = $"{incident.Id}{fileExtention}";
@@ -29,6 +36,7 @@ public abstract class BaseVirusScanFileHandler
             await file.CopyToAsync(fileStream, CancellationToken.None);
         }
 
+        incident.Code = $"F-{date.Day}/{date.Month}/{date.Year}-{count}";
         incident.FullPath = fullPath;
         incident.FileName = fileName;
         incident.FolderName = _scanInfoService.FileStorageFolderName;

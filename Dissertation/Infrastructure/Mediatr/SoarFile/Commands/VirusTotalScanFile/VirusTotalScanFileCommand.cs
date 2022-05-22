@@ -3,7 +3,6 @@ using AutoMapper;
 using Newtonsoft.Json;
 using Dissertation.Common.Services;
 using Dissertation.Persistence.Entities;
-using Dissertation.Persistence.Entities.Common;
 using Dissertation.Common.Services.DirectoryService;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Common;
 
@@ -20,8 +19,9 @@ public class VirusTotalScanFileCommandHandler
             IFileService fileService, 
             IMapper mapper,
             IApplicationDbContext context, 
-            IScanInfoService scanInfoService
-        ) : base(fileService, context, scanInfoService) => (_mapper) = (mapper);
+            IScanInfoService scanInfoService,
+            IDateTime dateTime
+        ) : base(fileService, context, scanInfoService, dateTime) => (_mapper) = (mapper);
 
     public async Task<VirusTotalScanResultDto> Handle(VirusTotalScanFileCommand request, CancellationToken cancellationToken)
     {

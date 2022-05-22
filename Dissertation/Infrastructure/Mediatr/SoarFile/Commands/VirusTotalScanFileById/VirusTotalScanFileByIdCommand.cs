@@ -19,15 +19,16 @@ public class VirusTotalScanFileByIdCommandHandler
             IFileService fileService,
             IMapper mapper,
             IApplicationDbContext context,
-            IScanInfoService scanInfoService
-        ) : base(fileService, context, scanInfoService) => (_mapper) = (mapper);
+            IScanInfoService scanInfoService,
+            IDateTime dateTime
+        ) : base(fileService, context, scanInfoService, dateTime) => (_mapper) = (mapper);
 
     public async Task<Unit> Handle(VirusTotalScanFileByIdCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request.FileIncidentId);
 
         var incident = await _context.FileIncidents.FindAsync(request.FileIncidentId);
-        var content = await GetReportDetailsByFilePathAsync(incident.FullPath);
+        var content = await GetReportDetailsByFilePathAsync(incident!.FullPath);
 
         var scanResult = JsonConvert.DeserializeObject<VirusTotalScanResultDto>(content) ?? new();
 

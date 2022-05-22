@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Dissertation.Infrastructure.Mappings;
 using Dissertation.Persistence.Entities;
-using Dissertation.Persistence.Entities.Common;
 
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.SystemVirusScanFile;
 
