@@ -23,11 +23,11 @@ export class HomePage extends Component {
             : HomePage.renderTest(this.state.test);
 
         return (
-            <div>
+            <>
                 <h1>Home page</h1>
                 <p>This component demonstrates fetching data from the server.</p>
-                {contents}
-            </div>
+                <div>{contents}</div>
+            </>
         );
     }
 
