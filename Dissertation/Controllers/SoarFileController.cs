@@ -8,6 +8,8 @@ using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFile;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.VirusTotalScanFileById;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.CreateVirusHashInfoByZip;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Queries.GetFileIncidentWithPagination;
+using Dissertation.Infrastructure.Common;
 
 namespace Dissertation.Controllers;
 
@@ -37,6 +39,10 @@ public class SoarFileController : ApiControllerBase
     public async Task<string> GetSha256([FromForm] GetSha256Query query)
         => await Mediator.Send(query);
 
+    [HttpGet]
+    public async Task<PaginatedList<FileIncidentDto>> GetAll([FromQuery] GetFileIncidentWithPaginationQuery query)
+        => await Mediator.Send(query);
+
     [HttpPut]
     public async Task<Unit> VirusTotalScanById([FromQuery] VirusTotalScanFileByIdCommand command)
         => await Mediator.Send(command);
@@ -45,6 +51,7 @@ public class SoarFileController : ApiControllerBase
     [RequestSizeLimit(bytes: 100_000_000)]
     public async Task<Unit> CreateVirusHashInfoByZip([FromForm] CreateVirusHashInfoByZipCommand command)
         => await Mediator.Send(command);
+
 
     [HttpGet]
     public FileIncident Test()
