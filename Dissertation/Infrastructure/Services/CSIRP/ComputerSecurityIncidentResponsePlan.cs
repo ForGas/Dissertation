@@ -3,7 +3,7 @@ using Dissertation.Persistence.Entities;
 
 namespace Dissertation.Infrastructure.Services.CSIRP;
 
-public class ComputerSecurityIncidentResponsePlan : IComputerSecurityIncidentResponsePlan<BaseIncident>
+public class ComputerSecurityIncidentResponsePlan : IComputerSecurityIncidentResponsePlan<IIncident>
 {
     private IPlanService _planService;
 
@@ -18,9 +18,9 @@ public class ComputerSecurityIncidentResponsePlan : IComputerSecurityIncidentRes
     public void SetStrategyFactory(IPlanService strategy)
         => (_planService) = (strategy);
 
-    public PlannedResponsePlan GetPlanFactory(PlanTypeStrategy type, BaseIncident incident)
-        => _planService.GetPlan(type, incident);
+    public PlannedResponsePlan GetPlan(PlanTypeStrategy type, IIncident incident)
+        => _planService.GetPlanFactory(type, incident);
 
-    public IPlanReplyToolStrategy GetPlanReplyTool(PlanTypeStrategy type, BaseIncident incident)
+    public IPlanReplyToolStrategy GetPlanReplyTool(PlanTypeStrategy type, IIncident incident)
         => _planService.GetPlanReplyToolStrategy(type, incident);
 }

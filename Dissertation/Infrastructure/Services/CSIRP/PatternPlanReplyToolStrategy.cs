@@ -1,14 +1,17 @@
-﻿using Dissertation.Common.Services.CSIRP;
+﻿using Dissertation.Common.Services;
+using Dissertation.Common.Services.CSIRP;
 using Dissertation.Persistence.Entities;
 
 namespace Dissertation.Infrastructure.Services.CSIRP;
 
 public class PatternPlanReplyToolStrategy : IPlanReplyToolStrategy
 {
+    private readonly IApplicationDbContext _context;
     private readonly IIncident _incident;
 
-    public PatternPlanReplyToolStrategy(IIncident incident)
-        => _incident = incident;
+    public PatternPlanReplyToolStrategy(IIncident incident, IApplicationDbContext context)
+        => (_incident, _context) = (incident, context);
+
 
     public IIncident GetIncident() => _incident;
 

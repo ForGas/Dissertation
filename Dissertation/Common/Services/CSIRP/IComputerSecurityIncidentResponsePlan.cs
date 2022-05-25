@@ -9,6 +9,6 @@ public interface IComputerSecurityIncidentResponsePlan<TIncident>
 {
     bool GetApprove();
     void SetStrategyFactory(IPlanService strategy);
-    PlannedResponsePlan GetPlanFactory(PlanTypeStrategy type, TIncident incident);
+    PlannedResponsePlan GetPlan(PlanTypeStrategy type, TIncident incident);
     IPlanReplyToolStrategy GetPlanReplyTool(PlanTypeStrategy type, TIncident incident);
 }
