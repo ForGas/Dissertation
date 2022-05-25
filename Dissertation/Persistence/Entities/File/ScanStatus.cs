@@ -12,8 +12,8 @@ public enum ScanStatus
     [Display(Name = "Нет определения")]
     NoDefinition = 0,
 
-    [EnumMember(Value = "Требуется анализ")]
-    [Display(Name = "Требуется анализ")]
+    [EnumMember(Value = "В процессе анализа")]
+    [Display(Name = "В процессе анализа")]
     Analysis = 1,
 
     [EnumMember(Value = "Файл чист")]

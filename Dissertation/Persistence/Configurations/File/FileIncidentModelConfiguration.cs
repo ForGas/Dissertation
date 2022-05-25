@@ -12,7 +12,7 @@ public class FileIncidentModelConfiguration : IEntityTypeConfiguration<FileIncid
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id);
-        builder.Property(x => x.IpAddrees).HasMaxLength(30);
+        builder.Property(x => x.IpAddress).HasMaxLength(30);
         builder.Property(x => x.Domain).HasMaxLength(50);
         builder.Property(x => x.Code).HasMaxLength(512);
         builder.Property(x => x.IsSystemScanClean);

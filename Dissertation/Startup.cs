@@ -20,6 +20,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using Dissertation.Common.Services.CSIRP;
+using Dissertation.Infrastructure.Services.CSIRP;
 
 #nullable disable
 namespace Dissertation;
@@ -92,6 +94,8 @@ public class Startup
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IComputerSecurityIncidentResponsePlan<IIncident>, ComputerSecurityIncidentResponsePlan>();
+        services.AddTransient<IPlanService, PlanService>();
         services.AddTransient<IScanInfoService, ScanInfoService>();
         services.AddTransient<IFileService, ProjectDirectoryService>();
         services.AddTransient<IEmailService, EmailService>();

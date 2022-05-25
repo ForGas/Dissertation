@@ -1,41 +1,36 @@
 ﻿using MediatR;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Dissertation.Infrastructure.Mediatr.Monitoring.Queries
+namespace Dissertation.Infrastructure.Mediatr.Monitoring.Queries;
+
+public class MonitorHardDriveQuery : IRequest
 {
-    public class MonitorHardDriveQuery : IRequest
+}
+
+public class MonitorHardDriveQueryHandler : IRequestHandler<MonitorHardDriveQuery, Unit>
+{
+    public Task<Unit> Handle(MonitorHardDriveQuery request, CancellationToken cancellationToken)
     {
-    }
+        var watchers = new FileSystemWatcher[] {};
 
-    public class MonitorHardDriveQueryHandler : IRequestHandler<MonitorHardDriveQuery, Unit>
-    {
-        public Task<Unit> Handle(MonitorHardDriveQuery request, CancellationToken cancellationToken)
-        {
-            var watchers = new FileSystemWatcher[] {};
+        string[] drives = Environment.GetLogicalDrives();
 
-            string[] drives = Environment.GetLogicalDrives();
+        watchers = new FileSystemWatcher[drives.Length];
 
-            watchers = new FileSystemWatcher[drives.Length];
+        int i = 0;
 
-            int i = 0;
+        //foreach (string strDrive in drives)
 
-            //foreach (string strDrive in drives)
+        //{
+        //    var localWatcher = new FileSystemWatcher();
 
-            //{
-            //    var localWatcher = new FileSystemWatcher();
+        //    localWatcher.Path = strDrive;
 
-            //    localWatcher.Path = strDrive;
+        //    watchers[i] = localWatcher;
 
-            //    watchers[i] = localWatcher;
+        //    localWatcher.EnableRaisingEvents = true;
+        //    i++;
+        //}
 
-            //    localWatcher.EnableRaisingEvents = true;
-            //    i++;
-            //}
-
-            return Task.FromResult(Unit.Value);
-        }
+        return Task.FromResult(Unit.Value);
     }
 }
