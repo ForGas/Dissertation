@@ -10,6 +10,8 @@ using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalRepo
 using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.CreateVirusHashInfoByZip;
 using Dissertation.Infrastructure.Mediatr.SoarFile.Queries.GetFileIncidentWithPagination;
 using Dissertation.Infrastructure.Common;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Queries.GetFileIncidentById;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Queries.GetVirusTotalReport;
 
 namespace Dissertation.Controllers;
 
@@ -40,7 +42,11 @@ public class SoarFileController : ApiControllerBase
         => await Mediator.Send(query);
 
     [HttpGet]
-    public async Task<PaginatedList<FileIncidentDto>> GetAll([FromQuery] GetFileIncidentWithPaginationQuery query)
+    public async Task<FileIncidentDto> GetFileIncident([FromQuery] GetFileIncidentByIdQuery query)
+        => await Mediator.Send(query);
+
+    [HttpGet]
+    public async Task<PaginatedList<FileIncidentTableDto>> GetAll([FromQuery] GetFileIncidentWithPaginationQuery query)
         => await Mediator.Send(query);
 
     [HttpPut]
@@ -51,18 +57,4 @@ public class SoarFileController : ApiControllerBase
     [RequestSizeLimit(bytes: 100_000_000)]
     public async Task<Unit> CreateVirusHashInfoByZip([FromForm] CreateVirusHashInfoByZipCommand command)
         => await Mediator.Send(command);
-
-
-    [HttpGet]
-    public FileIncident Test()
-    {
-        var test = new FileIncident()
-        {
-            Id = Guid.NewGuid(),
-            FullPath = "test",
-            FolderName = "dsadas"
-        };
-
-        return test;
-    }
 }
