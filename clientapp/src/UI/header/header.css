@@ -1,0 +1,21 @@
+.header_wrapper {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(5, 5, 46, 1) 25%, rgba(0, 212, 255, 1) 100%);
+}
+
+.nav-link {
+    font-size: 17px;
+    font-weight: normal;
+    color: aliceblue !important;
+}
+
+.navbar-brand {
+    font-size: 28px;
+    font-weight: normal;
+    color: aliceblue !important;
+}
+
+.navbar-toggler {
+    background-color: aliceblue !important;
+    border: none;
+}

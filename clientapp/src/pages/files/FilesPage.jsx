@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Table } from '../UI/Table';
+import { Table } from '../../UI/Table';
+import { Container, Spinner, Row } from 'react-bootstrap';
+import './files.css'
+import { GET_FILE_ALL } from '../../constants/apiUrl'
 
 export const FilesPage = () => {
     const [data, setData] = useState([]);
@@ -16,7 +19,7 @@ export const FilesPage = () => {
     }, [loading])
 
     async function populateData() {
-        await fetch('api/SoarFile/GetAll', {
+        await fetch(GET_FILE_ALL, {
             method: 'GET',
             url: '/',
         })
@@ -85,13 +88,20 @@ export const FilesPage = () => {
     )
 
     let contents = tableData.length < 0
-            ? <p><em>Loading...</em></p>
-            :  <Table columns={columns} data={tableData} />;
+        ? <Row className="justify-content-center">
+            <Spinner animation="border" variant="primary" />
+        </Row>
+        : <Table columns={columns} data={tableData} />;
 
     return (
-            <div>
-                <h3>File incident Table</h3>
-                <div>{contents}</div>
-            </div>
-        )
+        <>
+            <section className='files_wrapper'>
+                <Container>
+                    <h2 className='files-title_text'>File incident Table</h2>
+
+                    <div>{contents}</div>
+                </Container>
+            </section>
+        </>
+    )
 }

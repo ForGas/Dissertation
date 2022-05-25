@@ -1,0 +1,28 @@
+.system-scan-virus_wrapper {
+    margin: 20px 0 20px 0;
+    padding: 20px 0 20px 0;
+}
+
+.form_style {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+
+.system-scan-virus_label {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: bold !important;
+    text-align: center;
+    background: #2dced2;
+    background: -webkit-linear-gradient(to right, #2dced2, #6d09f7);
+    background: linear-gradient(to right, #2dced2, #6d09f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}

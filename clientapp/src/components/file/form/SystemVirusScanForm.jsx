@@ -1,11 +1,18 @@
-import React, { useRef } from 'react';
-import { Form, FormGroup, Button, Label, Input, Col } from 'reactstrap'
+import React, { useRef, useState } from 'react';
+import { Form, FormGroup, Button, Label, Input } from 'reactstrap'
 import { useInput } from '../../hooks/useInput'
+import { Container } from 'react-bootstrap';
 import { SYSTEM_VIRUS_SCAN } from '../../../constants/apiUrl'
+import { useNavigate } from "react-router-dom";
+import './systemVirusScan.css'
 
 export const SystemVirusScanForm = () => {
     const [fileProps, resetForm] = useInput([]);
     const fileInputRef = useRef();
+    const [data, setData] = useState([]);
+    const [error, setError] = useState();
+    const [loading, setLoading] = useState(true);
+    let navigate = useNavigate();
 
     const onSubmit = e => {
         e.preventDefault();
@@ -18,31 +25,50 @@ export const SystemVirusScanForm = () => {
             body: formData,
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            });
+            .then(setData)
+            .then(() => setLoading(false))
+            .catch(setError);
 
         resetForm();
     }
 
+    const navigateReport = e => {
+        navigate(`/files/report/${data.id}`);
+    }
+
+    let contents = loading
+        ? <></>
+        : <div>
+            <div>{data.status}</div>
+            <Button onClick={navigateReport}>Перейти к отчету</Button>
+        </div>
+
     return (
         <>
-            <Form>
-                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label>Sending a file for virus scan</Label >
-                    <Col sm={5}>
-                        <Input innerRef = {fileInputRef}
-                            {...fileProps}
-                            id="formFile"
-                            type="file"
-                            name="file"
-                            placeholder="Enter file"
-                            className="mb-3"
-                        />
-                        <Button type="submit" outline color="secondary" onClick={onSubmit}>Send</Button>
-                    </Col>
-                </FormGroup>
-            </Form>
+            <section className="system-scan-virus_wrapper">
+                <Container>
+                    <Form className="form_style">
+                        <FormGroup>
+                            <Label className="system-scan-virus_label">Sending a file for virus scan</Label >
+                            <Input innerRef={fileInputRef}
+                                {...fileProps}
+                                id="formFile"
+                                type="file"
+                                name="file"
+                                placeholder="Enter file"
+                                className="mb-3"
+                            />
+                            <Button type="submit" outline color="secondary" onClick={onSubmit}>Send</Button>
+                        </FormGroup>
+                    </Form>
+                </Container>
+            </section>
+
+            <section>
+                <Container>
+                    {contents}
+                </Container>
+            </section>
         </>
     );
 }

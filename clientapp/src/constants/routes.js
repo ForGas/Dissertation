@@ -1,8 +1,8 @@
 import React from "react";
-import { FilesPage } from '../pages/FilesPage'
+import { FilesPage } from '../pages/files/FilesPage'
+import { NotFoundPage } from '../pages/notFound/NotFoundPage'
 import { SystemVirusScanForm } from '../components/file/form/SystemVirusScanForm'
 import { ReportDetails } from '../components/file/report/ReportDetails'
-import { NotFoundPage } from '../pages/NotFoundPage'
 
 // const FilesPage = React.lazy(() => import("../components/pages/FilesPage"));
 // const SystemVirusScanForm = React.lazy(() => import("../components/file/form/SystemVirusScanForm"));
@@ -17,12 +17,12 @@ const routes = [
     {
         path: "/files/add",
         element: <SystemVirusScanForm />,
-        exact: false,
+        exact: true,
     },
     {
-        path: "/files/report",
+        path: "/files/report/:incidentId",
         element: <ReportDetails />,
-        exact: false,
+        exact: true,
     },
     {
         path: "*",

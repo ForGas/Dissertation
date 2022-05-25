@@ -1,10 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Layout } from './pages/Layout';
-import { HomePage } from './pages/HomePage';
+import { Layout } from './UI/Layout';
+import { HomePage } from './pages/home/HomePage';
 import routes from './constants/routes';
-import "normalize.css";
-import "sanitize.css";
 
 export default function App() {
     return (

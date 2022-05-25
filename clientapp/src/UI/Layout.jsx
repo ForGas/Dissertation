@@ -1,17 +1,14 @@
 import React from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
+import { Header } from './header/Header';
+import { Footer } from './footer/Footer';
 import { Outlet } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
 
 const Layout = () => {
     return (
         <>
             <Header />
             <main>
-                <Container>
-                    <Outlet />
-                </Container>
+                <Outlet />
             </main>
             <Footer />
         </>
