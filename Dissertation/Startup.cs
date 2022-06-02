@@ -99,6 +99,10 @@ public class Startup
         services.AddTransient<IScanInfoService, ScanInfoService>();
         services.AddTransient<IFileService, ProjectDirectoryService>();
         services.AddTransient<IEmailService, EmailService>();
+        services.AddScoped<IRespondentAutomationLogic, RespondentPredictionAutomate>();
+
+        services.AddScoped(x => new RespondentPredictionAutomate(
+                    x.GetService<IApplicationDbContext>()));
 
         services.AddSwaggerGen(c =>
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dissertation", Version = "v1" })
@@ -134,5 +138,7 @@ public class Startup
 
             endpoints.MapHangfireDashboard();
         });
+
+        RecurringJob.AddOrUpdate<AutomateStaffStatisticWorkloadJobService>(job => job.AutomateAsync(), "*/5 * * * *", TimeZoneInfo.Local);
     }
 }

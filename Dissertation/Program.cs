@@ -1,5 +1,4 @@
 using Dissertation.Persistence;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Dissertation;
@@ -12,21 +11,20 @@ public class Program
         {
             Log.Information("Starting web host");
 
-            var host = CreateHostBuilder(args).Build();
-
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-
-            var context = services.GetRequiredService<ApplicationDbContext>();
-            var hcontext = services.GetRequiredService<HangfireDbContext>();
-
-            if (context.Database.IsSqlServer())
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
             {
-                context.Database.Migrate();
-                hcontext.Database.Migrate();
-            }
+                loggerConfiguration.WriteTo.Console();
+            });
 
-            await host.RunAsync();
+            var startup = new Startup(builder.Configuration);
+            startup.ConfigureServices(builder.Services);
+
+            var app = builder.Build();
+            await DbInitializer.InitializeAsync(app.Services);
+
+            startup.Configure(app, app.Environment);
+            await app.RunAsync();
             return 0;
         }
         catch (Exception ex)
@@ -47,11 +45,4 @@ public class Program
             Log.CloseAndFlush();
         }
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
 }
