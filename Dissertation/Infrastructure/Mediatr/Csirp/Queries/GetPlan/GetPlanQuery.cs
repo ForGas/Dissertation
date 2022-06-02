@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Dissertation.Common.Services.CSIRP;
 using Dissertation.Infrastructure.Services;
 using Dissertation.Persistence.Entities;
+using Dissertation.Common.Services.AutomationLogic;
 
 namespace Dissertation.Infrastructure.Mediatr.Csirp.Queries.GetPlan;
 
