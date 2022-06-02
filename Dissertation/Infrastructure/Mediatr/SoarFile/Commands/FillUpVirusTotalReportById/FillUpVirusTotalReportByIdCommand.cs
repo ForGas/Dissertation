@@ -7,12 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Dissertation.Persistence.Entities;
 using Dissertation.Persistence.Entities.Common;
 using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
 
+#nullable disable
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
 
-public record class FillUpVirusTotalReportByIdCommand(Guid VirusTotalReportDetailId) : IRequest<Unit>;
+public record class FillUpVirusTotalReportByIdCommand(Guid VirusTotalReportDetailId) : IRequest<ReportStatus>;
 
-public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVirusTotalReportByIdCommand, Unit>
+public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVirusTotalReportByIdCommand, ReportStatus>
 {
     private readonly IScanInfoService _scanInfoService;
     private readonly IApplicationDbContext _context;
@@ -21,13 +23,17 @@ public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVi
     IScanInfoService scanInfoService) =>
         (_context, _scanInfoService) = (context, scanInfoService);
 
-    public async Task<Unit> Handle(FillUpVirusTotalReportByIdCommand request, CancellationToken cancellationToken)
+    public async Task<ReportStatus> Handle(FillUpVirusTotalReportByIdCommand request, CancellationToken cancellationToken)
     {
-        var report = await _context.VirusTotalReportDetails
+        var report = _context.VirusTotalReportDetails
             .Include(x => x.FileDetails).ThenInclude(x => x.Incident)
-            .FirstOrDefaultAsync(x => x.Id == request.VirusTotalReportDetailId);
+            .FirstOrDefault(x => x.Id == request.VirusTotalReportDetailId);
 
         ArgumentNullException.ThrowIfNull(report);
+        if (!string.IsNullOrEmpty(report.JsonContent))
+        {
+            return ReportStatus.IsReady;
+        }
 
         var virusTotalrequest = new RestRequest();
         virusTotalrequest.AddQueryParameter("apikey", _scanInfoService.VirusTotalApiKey);
@@ -37,7 +43,15 @@ public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVi
         using var client = new RestClient(_scanInfoService.VirusTotalReportUrl);
         var response = await client.ExecuteGetAsync(virusTotalrequest);
 
-        dynamic jObject = JObject.Parse(response.Content ?? string.Empty);
+        var content = response.Content;
+        var reportResult = JsonConvert.DeserializeObject<ReportResult>(content);
+
+        if (reportResult == null || reportResult.Code == -2)
+        {
+            return ReportStatus.InQueue;
+        }
+
+        dynamic jObject = JObject.Parse(content);
         var list = new List<VirusScanReportDto>() { Capacity = 58 };
 
         foreach (var item in jObject.scans)
@@ -61,6 +75,19 @@ public class FillUpVirusTotalReportByIdCommandHandler : IRequestHandler<FillUpVi
         _context.FileIncidents.Update(incident);
         _ = await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return ReportStatus.IsReady;
     }
+}
+
+[JsonConverter(typeof(StringEnumConverter))]
+public enum ReportStatus
+{
+    InQueue = 0,
+    IsReady = 1,
+}
+
+public class ReportResult
+{
+    [JsonProperty("response_code")]
+    public int Code { get; set; }
 }

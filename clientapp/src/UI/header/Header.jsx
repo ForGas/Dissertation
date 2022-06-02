@@ -24,8 +24,8 @@ const Header = () => {
                                         <LinkContainer to={"/files/add"}>
                                             <NavDropdown.Item>System Virus Scan</NavDropdown.Item>
                                         </LinkContainer>
-                                        <LinkContainer to={"/files/report"}>
-                                            <NavDropdown.Item>Отчет</NavDropdown.Item>
+                                        <LinkContainer to={"/reports"}>
+                                            <NavDropdown.Item>Отчеты</NavDropdown.Item>
                                         </LinkContainer>
                                         {/* <NavDropdown.Divider /> */}
                                     </NavDropdown>

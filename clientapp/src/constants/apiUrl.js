@@ -6,4 +6,4 @@ export const VIRUS_TOTAL_SCAN_BY_ID = '/api/soarFile/VirusTotalScanById';
 export const GET_SHA256 = '/api/soarFile/GetSha256';
 export const GET_FILE_ALL = '/api/SoarFile/GetAll';
 export const GET_FILE_INCIDENT = '/api/SoarFile/GetFileIncident?incidentId=';
-export const FILL_UP_REPORT = '/api/SoarFile/FillUpVirusTotalReportById';
+export const FILL_UP_REPORT = '/api/SoarFile/FillUpVirusTotalReportById?virusTotalReportDetailId=';

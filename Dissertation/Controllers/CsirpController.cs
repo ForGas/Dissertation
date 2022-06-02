@@ -9,6 +9,6 @@ namespace Dissertation.Controllers;
 public class CsirpController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<Unit> GetPlan()
-        => await Mediator.Send(new GetPlanQuery());
+    public async Task<PlanDto> GetPlan([FromQuery] GetPlanQuery query)
+        => await Mediator.Send(query);
 }

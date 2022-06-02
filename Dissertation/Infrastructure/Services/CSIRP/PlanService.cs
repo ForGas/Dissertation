@@ -13,7 +13,7 @@ public class PlanService : IPlanService
     public PlannedResponsePlan GetPlanFactory(PlanTypeStrategy type, IIncident incident)
         => PlanStrategyFactory
             .GetStrategy(type, incident, _context)
-            .GetPlan();
+            .GetPlanAsync().Result;
     public IPlanReplyToolStrategy GetPlanReplyToolStrategy(PlanTypeStrategy type, IIncident incident)
         => PlanStrategyFactory.GetStrategy(type, incident, _context);
 }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
-using Dissertation.Common.Services;
 using AutoMapper;
+using Dissertation.Common.Services;
+using Dissertation.Infrastructure.Mediatr.SoarFile.Commands.FillUpVirusTotalReportById;
 
 #nullable disable
 namespace Dissertation.Infrastructure.Mediatr.SoarFile.Queries.GetVirusTotalReport;
@@ -11,13 +12,27 @@ public class GetVirusTotalReportQueryHandler : IRequestHandler<GetVirusTotalRepo
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
+    private readonly ISender _mediatr;
 
-    public GetVirusTotalReportQueryHandler(IApplicationDbContext context, IMapper mapper) =>
-        (_context, _mapper) = (context, mapper);
+    public GetVirusTotalReportQueryHandler(
+            IApplicationDbContext context, 
+            IMapper mapper,
+            ISender mediatr
+        ) => (_context, _mapper, _mediatr) = (context, mapper, mediatr);
 
     public async Task<string> Handle(GetVirusTotalReportQuery request, CancellationToken cancellationToken)
     {
         var report = await _context.VirusTotalReportDetails.FindAsync(request.ReportId);
+
+        if (string.IsNullOrEmpty(report.JsonContent))
+        {
+            _ = await _mediatr.Send(new FillUpVirusTotalReportByIdCommand(report.Id));
+
+            return _context.VirusTotalReportDetails
+                .FirstOrDefault(x => x.Id == report.Id)
+                .JsonContent;
+        }
+
         return report.JsonContent;
     }
 }

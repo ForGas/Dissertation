@@ -1,11 +1,13 @@
 ﻿using Dissertation.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Dissertation.Common.Services;
 
 public interface IApplicationDbContext
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    DatabaseFacade Database { get; }
 
     #region File
     public DbSet<FileIncident> FileIncidents { get; set; }

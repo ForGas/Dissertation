@@ -1,7 +1,9 @@
 ﻿using Dissertation.Common.Services;
 using Dissertation.Common.Services.CSIRP;
 using Dissertation.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 
+#nullable disable
 namespace Dissertation.Infrastructure.Services.CSIRP;
 
 public class ModernPlanReplyToolStrategy : IPlanReplyToolStrategy
@@ -14,11 +16,14 @@ public class ModernPlanReplyToolStrategy : IPlanReplyToolStrategy
 
     public IIncident GetIncident() => _incident;
 
-    public PlannedResponsePlan GetPlan()
+    public async Task<PlannedResponsePlan> GetPlanAsync()
     {
-        return new PlannedResponsePlan
-        {
-        };
+        var plan = await _context.PlannedResponsePlans
+            .Where(x => x.Type == PlanTypeStrategy.Modern && x.IncidentType == _incident.Type
+                && x.Priority == _incident.Priority)
+            .FirstOrDefaultAsync();
+
+        return plan;
     }
 
     public void Launch() => Console.WriteLine("algorithm B");

@@ -1,0 +1,29 @@
+h1 {
+    font-family: Roboto;
+    font-weight: bold !important;
+    text-align: center;
+    background: #2dced2;
+    background: -webkit-linear-gradient(to right, #2dced2, #6d09f7);
+    background: linear-gradient(to right, #2dced2, #6d09f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.home_text {
+    font-size: 16px;
+    font-weight: normal !important;
+}
+
+.home-main_wrapper{
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin: 20px 0 20px 0;
+    padding: 20px 0 20px 0;
+}
+
+.home-create-method_wrapper{
+    background-color: #F5F6F7;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin: 20px 0 20px 0;
+    padding: 20px 0 20px 0;
+}

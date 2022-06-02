@@ -13,6 +13,19 @@
     align-items: center;
 }
 
+.text {
+    font-family: Roboto;
+    font-weight: bold !important;
+    font-size: 20px;
+    text-align: center;
+    background: #2dced2;
+    background: -webkit-linear-gradient(to right, #2dced2, #6d09f7);
+    background: linear-gradient(to right, #2dced2, #6d09f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
 
 .system-scan-virus_label {
     font-family: Roboto;

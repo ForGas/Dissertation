@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo } from "react"
 import { GET_VIRUS_TOTAL_REPORT } from '../../../constants/apiUrl'
 import { ResponsiveContainer, Pie, PieChart, Cell, Tooltip, Legend, Label } from "recharts";
 import { Container } from 'react-bootstrap';
+import './reportDetailPie.css';
 
 export const ReportDetailPie = ({ reportId }) => {
-    //reportId = '21BDE1CD-28AA-44EB-9D3D-263CD2400877';
     const [data, setData] = useState([]);
-    const [error, setError] = useState();
     const [loading, setLoading] = useState(true);
     const [pieData, setPieData] = useState([]);
+    const [error, setError] = useState();
 
     useEffect(() => {
         if (!reportId) return;
@@ -31,10 +31,11 @@ export const ReportDetailPie = ({ reportId }) => {
 
     function createPieData() {
         const newPieData = data.map((item) => {
+            console.log(item.detected)
             return {
-                name: `${item.Name} ${item.result ? `(${item.result})` : ""}`,
+                name: `${item.name} ${item.result ? `(${item.result})` : ""}`,
                 value: 1.72,
-                color: item.detected ? "#a0102a" : "#0e0d92"
+                color: item.detected === true ? "#a0102a" : "#0e0d92"
             }
         })
         setPieData(newPieData);
@@ -44,24 +45,28 @@ export const ReportDetailPie = ({ reportId }) => {
         <>
             <section className="report-detail-pie_wrapper">
                 <Container>
-                    <h1>Report Details</h1>
-                    <ResponsiveContainer aspect={1} width={870} position="center">
-                        <PieChart width={870} height={400}>
-                            <Pie
-                                data={pieData}
-                                dataKey={"value"}
-                                fill="#8884d8"
-                                color="#000000"
-                            >
-                                <Label value="Virus scan Result" position="center" />
-                                {pieData.map((item, index) => (
-                                    <Cell key={`cell-${index}`} fill={item.color} cx="50%" cy="50%" />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                    <div className="report-pie-container">
+                        <h1>Report Details</h1>
+                        <div className="d-flex justify-content-center align-items-center">
+                            <ResponsiveContainer aspect={1} width={870} position="center">
+                                <PieChart width={870} height={400}>
+                                    <Pie
+                                        data={pieData}
+                                        dataKey={"value"}
+                                        fill="#8884d8"
+                                        color="#000000"
+                                    >
+                                        <Label value="VIRUS SCAN RESULT" position="center" />
+                                        {pieData.map((item, index) => (
+                                            <Cell key={`cell-${index}`} fill={item.color} cx="50%" cy="50%" />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                    <Legend />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
                 </Container>
             </section>
         </>

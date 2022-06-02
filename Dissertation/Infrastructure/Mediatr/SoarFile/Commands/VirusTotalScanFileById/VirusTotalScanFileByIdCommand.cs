@@ -34,9 +34,13 @@ public class VirusTotalScanFileByIdCommandHandler
 
         var fileDetails = _mapper.Map<FileDetails>(scanResult);
         var report = _mapper.Map<VirusTotalReportDetails>(scanResult);
+
+        incident.IsVirusHashInfoClean = !(_context.VirusHashInfo
+            .Any(x => x.Sha256 == fileDetails.Sha256 && x.IsVirus));
         fileDetails.Incident = incident;
         report.FileDetails = fileDetails;
 
+        _context.FileIncidents.Update(incident);
         _context.FileDetails.Add(fileDetails);
         _context.VirusTotalReportDetails.Add(report);
         _ = await _context.SaveChangesAsync(cancellationToken);

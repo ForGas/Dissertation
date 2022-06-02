@@ -28,7 +28,7 @@ public class FileIncidentTableDto : IMapFrom<FileIncident>
             .ForMember(x => x.Code, opt => opt.NullSubstitute(string.Empty))
             .ForMember(x => x.IpAddrees, opt => opt.NullSubstitute(string.Empty))
             .ForMember(x => x.Domain, opt => opt.NullSubstitute(string.Empty))
-            .ForMember(x => x.TypeName, opt => opt.MapFrom(y => y.TypeName))
+            .ForMember(x => x.TypeName, opt => opt.MapFrom(y => y.Type))
             .ForMember(x => x.Md5, opt => opt.MapFrom(y => y.Details!.Md5))
             .ForMember(x => x.Sha1, opt => opt.MapFrom(y => y.Details!.Sha1))
             .ForMember(x => x.Sha256, opt => opt.MapFrom(y => y.Details!.Sha256))

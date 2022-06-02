@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Form, FormGroup, Button, Label, Input } from 'reactstrap'
+import { Form, FormGroup, Button, Label, Input  } from 'reactstrap'
 import { useInput } from '../../hooks/useInput'
 import { Container } from 'react-bootstrap';
 import { SYSTEM_VIRUS_SCAN } from '../../../constants/apiUrl'
@@ -38,10 +38,17 @@ export const SystemVirusScanForm = () => {
 
     let contents = loading
         ? <></>
-        : <div>
-            <div>{data.status}</div>
-            <Button onClick={navigateReport}>Перейти к отчету</Button>
-        </div>
+        : <>
+            <p className='text'>{data.status}</p>
+            <div className='d-flex justify-content-center align-items-center'>
+                <Button 
+                    onClick={navigateReport} 
+                    className="btn btn-primary btn-lg btn-block"
+                >
+                    Перейти к отчету
+                </Button>
+            </div>
+        </>
 
     return (
         <>
@@ -64,7 +71,7 @@ export const SystemVirusScanForm = () => {
                 </Container>
             </section>
 
-            <section>
+            <section className="system-scan-virus_wrapper">
                 <Container>
                     {contents}
                 </Container>

@@ -31,7 +31,7 @@ export const FilesPage = () => {
 
     function createTableData() {
         if (data.items === undefined) return;
-
+        console.log(data.items)
         const tableData = data.items.map((item, index) => {
             return { ...item, subRows: undefined }
         })
