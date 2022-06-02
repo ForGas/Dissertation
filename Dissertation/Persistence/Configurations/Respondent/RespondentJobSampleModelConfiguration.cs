@@ -27,6 +27,6 @@ public class RespondentJobSampleModelConfiguration : IEntityTypeConfiguration<Re
             .HasForeignKey<RespondentJobSample>(x => x.IncidentId);
 
         builder.HasOne(r => r.NetworkIncident).WithOne(i => i.JobSample)
-            .HasForeignKey<RespondentJobSample>(x => x.IncidentId);
+            .HasForeignKey<RespondentJobSample>(x => x.NetworkIncidentId);
     }
 }

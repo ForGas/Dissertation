@@ -9,6 +9,7 @@ public class FileIncidentModelConfiguration : IEntityTypeConfiguration<FileIncid
     public void Configure(EntityTypeBuilder<FileIncident> builder)
     {
         builder.ToTable("FileIncidents");
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id);
@@ -16,8 +17,9 @@ public class FileIncidentModelConfiguration : IEntityTypeConfiguration<FileIncid
         builder.Property(x => x.Domain).HasMaxLength(50);
         builder.Property(x => x.Code).HasMaxLength(512);
         builder.Property(x => x.IsSystemScanClean);
+        builder.Property(x => x.IsVirusHashInfoClean);
 
-        builder.Ignore(x => x.TypeName);
+        builder.Ignore(x => x.Type);
 
         builder.Property(x => x.FileName).HasMaxLength(256).IsRequired();
         builder.Property(x => x.FolderName).HasMaxLength(256).IsRequired();

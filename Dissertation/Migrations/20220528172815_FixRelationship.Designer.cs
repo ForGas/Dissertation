@@ -4,6 +4,7 @@ using Dissertation.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dissertation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220528172815_FixRelationship")]
+    partial class FixRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,11 +210,8 @@ namespace Dissertation.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IncidentType")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("NotDefined");
+                    b.Property<int>("IncidentType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -220,9 +219,8 @@ namespace Dissertation.Migrations
                     b.Property<TimeSpan>("Performance")
                         .HasColumnType("time");
 
-                    b.Property<string>("Priority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -231,7 +229,9 @@ namespace Dissertation.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Modern");
 
                     b.HasKey("Id");
 
@@ -253,9 +253,6 @@ namespace Dissertation.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("NetworkIncidentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("PlanUsageInformation")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -275,10 +272,6 @@ namespace Dissertation.Migrations
                     b.HasIndex("IncidentId")
                         .IsUnique()
                         .HasFilter("[IncidentId] IS NOT NULL");
-
-                    b.HasIndex("NetworkIncidentId")
-                        .IsUnique()
-                        .HasFilter("[NetworkIncidentId] IS NOT NULL");
 
                     b.HasIndex("PlannedResponsePlanId");
 
@@ -496,7 +489,7 @@ namespace Dissertation.Migrations
 
                     b.HasOne("Dissertation.Persistence.Entities.NetworkIncident", "NetworkIncident")
                         .WithOne("JobSample")
-                        .HasForeignKey("Dissertation.Persistence.Entities.RespondentJobSample", "NetworkIncidentId");
+                        .HasForeignKey("Dissertation.Persistence.Entities.RespondentJobSample", "IncidentId");
 
                     b.HasOne("Dissertation.Persistence.Entities.PlannedResponsePlan", "PlannedResponsePlan")
                         .WithMany("RespondentJobSamples")

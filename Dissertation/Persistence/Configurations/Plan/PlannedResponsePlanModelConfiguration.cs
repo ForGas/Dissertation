@@ -1,10 +1,11 @@
 ﻿using Dissertation.Persistence.Entities;
+using Dissertation.Persistence.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dissertation.Persistence.Configurations.Plan;
 
-public class StaffModelConfiguration : IEntityTypeConfiguration<PlannedResponsePlan>
+public class PlannedResponsePlanModelConfiguration : IEntityTypeConfiguration<PlannedResponsePlan>
 {
     public void Configure(EntityTypeBuilder<PlannedResponsePlan> builder)
     {
@@ -17,7 +18,15 @@ public class StaffModelConfiguration : IEntityTypeConfiguration<PlannedResponseP
 
         builder.Property(x => x.Type)
             .HasConversion<string>()
-            .HasDefaultValue(PlanTypeStrategy.Modern)
+            .IsRequired();
+
+        builder.Property(x => x.IncidentType)
+            .HasConversion<string>()
+            .HasDefaultValue(IncidentType.NotDefined)
+            .IsRequired();
+
+        builder.Property(x => x.Priority)
+            .HasConversion<string>()
             .IsRequired();
 
         builder.HasMany(p => p.PathMaps).WithMany(pm => pm.Plans);

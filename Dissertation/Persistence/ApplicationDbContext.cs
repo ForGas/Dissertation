@@ -2,6 +2,7 @@
 using Dissertation.Common.Services;
 using Dissertation.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 #nullable disable
 namespace Dissertation.Persistence;

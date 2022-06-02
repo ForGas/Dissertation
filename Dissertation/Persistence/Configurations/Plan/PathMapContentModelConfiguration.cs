@@ -15,5 +15,10 @@ public class PathMapContentModelConfiguration : IEntityTypeConfiguration<PathMap
         builder.Property(x => x.Title).HasMaxLength(256);
         builder.Property(x => x.ResponseToolInfo).HasMaxLength(2560);
         builder.Property(x => x.Source).HasMaxLength(2560);
+
+        builder.Property(x => x.Stage)
+            .HasConversion<string>()
+            .HasDefaultValue(PathMapStage.Initial)
+            .IsRequired();
     }
 }

@@ -9,6 +9,7 @@ public class StaffStatisticModelConfiguration : IEntityTypeConfiguration<StaffSt
     public void Configure(EntityTypeBuilder<StaffStatistic> builder)
     {
         builder.ToTable("StaffStatistics");
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id);
@@ -23,6 +24,6 @@ public class StaffStatisticModelConfiguration : IEntityTypeConfiguration<StaffSt
             .HasDefaultValue(Workload.Neutral)
             .IsRequired();
 
-        builder.HasMany(ss => ss.JobSamples).WithOne(j => j.StaffStatistic);
+        builder.HasMany(ss => ss.JobSamples).WithMany(j => j.StaffStatistics);
     }
 }
