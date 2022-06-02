@@ -6,5 +6,5 @@ namespace Dissertation.Persistence.Entities;
 public class NetworkIncident : BaseIncident
 {
     [NotMapped]
-    public override IncidentType TypeName => IncidentType.Network;
+    public override IncidentType Type => IncidentType.Network;
 }

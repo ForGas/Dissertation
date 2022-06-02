@@ -11,7 +11,7 @@ public abstract class BaseIncident : AuditableEntity, IIncident
     public string Domain { get; set; }
     public string Code { get; set; }
     public virtual RespondentJobSample JobSample { get; set; }
-    public virtual IncidentType TypeName => IncidentType.NotDefined;
+    public virtual IncidentType Type => IncidentType.NotDefined;
 
     public static explicit operator BaseIncident(IncidentType incident)
     {

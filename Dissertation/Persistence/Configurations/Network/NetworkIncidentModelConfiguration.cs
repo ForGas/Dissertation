@@ -15,6 +15,6 @@ public class NetworkIncidentModelConfiguration : IEntityTypeConfiguration<Networ
         builder.Property(x => x.IpAddress).HasMaxLength(30);
         builder.Property(x => x.Domain).HasMaxLength(50);
 
-        builder.Ignore(x => x.TypeName);
+        builder.Ignore(x => x.Type);
     }
 }
